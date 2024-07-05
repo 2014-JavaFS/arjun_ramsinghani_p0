@@ -42,6 +42,6 @@ public class SchoolPlatform {
             }
         }
 
-        while (choice != 3);
+        while (choice != 3); // we do not want the code to execute when we exit
     }
 }
