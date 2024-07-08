@@ -62,4 +62,15 @@ public class Student {
     public void setL_name(String l_name) {
         this.l_name = l_name;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", student_id=" + student_id +
+                ", f_name='" + f_name + '\'' +
+                ", l_name='" + l_name + '\'' +
+                '}';
+    }
 }

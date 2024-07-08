@@ -62,4 +62,15 @@ public class Faculty {
     public void setL_name(String l_name) {
         this.l_name = l_name;
     }
+
+    @Override
+    public String toString() {
+        return "Faculty{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", faculty_id=" + faculty_id +
+                ", f_name='" + f_name + '\'' +
+                ", l_name='" + l_name + '\'' +
+                '}';
+    }
 }
