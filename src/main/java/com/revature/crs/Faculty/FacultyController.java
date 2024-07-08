@@ -34,6 +34,7 @@ public class FacultyController {
         facultyHomepage(username);
     }
 
+    // Completed
     public void facultyHomepage(String username) {
         System.out.println("Welcome " + username);
 

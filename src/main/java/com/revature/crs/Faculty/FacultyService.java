@@ -1,6 +1,7 @@
 package com.revature.crs.Faculty;
 
 public class FacultyService {
+    // Will complete once database is completed
     private Faculty faculty = new Faculty();
 
     // TODO: modify once database is complete

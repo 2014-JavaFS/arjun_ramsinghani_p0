@@ -17,7 +17,7 @@ public class SchoolPlatform {
 
         int choice = 0;
 
-        do {
+        do { // we want to do this only once
             System.out.println("Which account do you want to log in to today?");
             System.out.println("1. Faculty");
             System.out.println("2. Student");
@@ -35,7 +35,7 @@ public class SchoolPlatform {
 
             choice = scanner.nextInt();
 
-            switch (choice) {
+            switch (choice) { // helps us with decision-making
                 case 1:
                     facultyController.logInAccount();
                     System.exit(0);

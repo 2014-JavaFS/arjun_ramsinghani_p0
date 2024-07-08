@@ -45,6 +45,7 @@ public class StudentController {
         //studentHomepage();
     }
 
+    // Completed
     public void studentHomepage(String username) {
         System.out.println("Welcome " + username);
 

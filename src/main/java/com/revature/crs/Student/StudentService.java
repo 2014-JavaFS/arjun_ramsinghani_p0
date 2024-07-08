@@ -1,6 +1,7 @@
 package com.revature.crs.Student;
 
 public class StudentService {
+    // Will complete once database is completed
     private Student student = new Student();
 
     // TODO: modify once database is complete
