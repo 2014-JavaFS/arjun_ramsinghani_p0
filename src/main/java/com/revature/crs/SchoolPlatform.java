@@ -1,13 +1,21 @@
 package com.revature.crs;
 
+import com.revature.crs.Faculty.FacultyController;
+import com.revature.crs.Faculty.FacultyService;
+import com.revature.crs.Student.StudentController;
+import com.revature.crs.Student.StudentService;
 import java.util.Scanner;
 
 public class SchoolPlatform {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        FacultyService facultyService = new FacultyService();
+        FacultyController facultyController = new FacultyController(scanner, facultyService);
+        StudentService studentService = new StudentService();
+        StudentController studentController = new StudentController(scanner, studentService);
         System.out.println("Welcome to School Platform!");
 
         int choice = 0;
-        Scanner scanner = new Scanner(System.in);
 
         do {
             System.out.println("Which account do you want to log in to today?");
@@ -29,19 +37,17 @@ public class SchoolPlatform {
 
             switch (choice) {
                 case 1:
-                    System.out.println("Welcome to Faculty login. Please present your credentials.");
-                    break;
+                    facultyController.logInAccount();
+                    System.exit(0);
                 case 2:
-                    System.out.println("Welcome to Student login. Please present your credentials.");
-                    break;
+                    studentController.logInAccount();
+                    System.exit(0);
                 case 3:
                     System.out.println("Exiting...");
                     break;
                 default:
                     System.out.println("Invalid Input. Please enter a number between 1-3.");
             }
-        }
-
-        while (choice != 3); // we do not want the code to execute when we exit
+        } while (choice != 3); // we do not want the code to execute when we exit
     }
 }
