@@ -36,7 +36,7 @@ public class StudentController {
         String password = scanner.next();
 
         // TODO: modify once database is complete
-        studentService.logInAccount(username, password); // will modify once database is done
+        studentService.logInAccount(); // will modify once database is done
         studentHomepage(username);
     }
 
@@ -57,7 +57,7 @@ public class StudentController {
             System.out.println("2. Register for a Course");
             System.out.println("3. Cancel a Course Registration");
             System.out.println("4. View Registered Courses");
-            System.out.println("4. Log Out");
+            System.out.println("5. Log Out");
 
             System.out.println();
 

@@ -30,7 +30,7 @@ public class FacultyController {
         String password = scanner.next();
 
         // TODO: modify once database is complete
-        facultyService.logInAccount(username, password); // will modify once database is done
+        facultyService.logInAccount(); // will modify once database is done
         facultyHomepage(username);
     }
 

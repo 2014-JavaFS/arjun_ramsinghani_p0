@@ -1,26 +1,40 @@
 package com.revature.crs.Student;
 
 public class StudentService {
-    // Will complete once database is completed
+    /* SERVICE CLASS DOCUMENTATION
+    * The Service class is used to define the business logic coming to the backend by use of the Javalin and REST API to the Data Access Object (DAO)
+    */
     private Student student = new Student();
 
     // TODO: modify once database is complete
-    public String logInAccount(String username, String password) {
-        return "Your username is: " + username + " and your password is: " + password;
+    public void logInAccount() {
+        // return the account from the database
     }
 
     // TODO: modify once database is complete
-    public void createAccount() {}
+    public void createAccount() {
+        // return the created account
+    }
 
     // TODO: modify once database is complete
-    public void viewCourses() {}
+    public void viewCourses() {
+        // return a list of all courses
+    }
 
     // TODO: modify once database is complete
-    public void registerForCourse() {}
+    public void registerForCourse() {
+        // find course by id through view courses
+        // return updated registration
+    }
 
     // TODO: modify once database is complete
-    public void cancelCourseRegistration() {}
+    public void cancelCourseRegistration() {
+        // find in registered courses
+        // return updated registration
+    }
 
     // TODO: modify once database is complete
-    public void viewRegisteredCourses() {}
+    public void viewRegisteredCourses() {
+        // return a list of all courses the student registered for
+    }
 }
