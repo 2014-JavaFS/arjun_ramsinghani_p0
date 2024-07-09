@@ -5,6 +5,11 @@ import com.revature.crs.SchoolPlatform;
 
 import java.util.Scanner;
 
+// TODO: review me
+
+/**
+ * Will add java docs later
+ */
 public class FacultyController {
     public Scanner scanner;
     private final FacultyService facultyService;

@@ -1,3 +1,4 @@
+-- TODO review me
 create schema school;
 set search_path to school;
 

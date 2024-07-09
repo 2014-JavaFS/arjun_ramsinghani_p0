@@ -1,5 +1,10 @@
 package com.revature.crs.Course;
 
+// TODO: review me
+
+/**
+ * Will add java docs later
+ */
 public class Course {
     private int courseId;
     private String courseInitials;

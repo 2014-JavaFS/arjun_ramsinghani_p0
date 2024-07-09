@@ -1,5 +1,10 @@
 package com.revature.crs.Student;
 
+// TODO: review me
+
+/**
+ * Will add java docs later
+ */
 public class Student {
     private int student_id;
     private String username;

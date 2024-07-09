@@ -1,5 +1,10 @@
 package com.revature.crs.Student;
 
+// TODO: review me
+
+/**
+ * Will add java docs later
+ */
 public class StudentService {
     /* SERVICE CLASS DOCUMENTATION
     * The Service class is used to define the business logic coming to the backend by use of the Javalin and REST API to the Data Access Object (DAO)

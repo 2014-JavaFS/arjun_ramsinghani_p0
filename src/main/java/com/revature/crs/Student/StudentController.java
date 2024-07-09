@@ -2,6 +2,11 @@ package com.revature.crs.Student;
 
 import java.util.Scanner;
 
+// TODO: review me
+
+/**
+ * Will add java docs later
+ */
 public class StudentController {
     public Scanner scanner;
     private final StudentService studentService;

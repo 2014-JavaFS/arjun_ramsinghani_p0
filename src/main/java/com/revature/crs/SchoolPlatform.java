@@ -6,6 +6,11 @@ import com.revature.crs.Student.StudentController;
 import com.revature.crs.Student.StudentService;
 import java.util.Scanner;
 
+// TODO: review me
+
+/**
+ * Will add java docs later
+ */
 public class SchoolPlatform {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
