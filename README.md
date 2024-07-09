@@ -56,7 +56,7 @@ Regardless of the project concept you choose, you will be required to adhere to 
 
 ## Presentation & Deadlines
 
-### Checkpoint (Thursday July 11th 2024)
+### Checkpoint (Friday July 12th 2024)
 
 -   [ ] Data persisted to the database
 -   [ ] Able to explain the functional code for all three layers of your API
