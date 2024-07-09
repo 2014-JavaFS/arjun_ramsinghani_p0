@@ -5,8 +5,9 @@ public class Course {
     private String courseInitials;
     private int courseNumber;
     private String courseName;
-    private int spotsAvailable;
-    private int spotsTaken;
+    private String courseDetails;
+    private short spotsAvailable;
+    private short spotsTaken;
     private String instructor;
 
     public Course() {
@@ -18,20 +19,22 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public Course(String courseInitials, int courseNumber, String courseName, int spotsAvailable, int spotsTaken, String instructor) {
+    public Course(String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTaken, String instructor) {
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
         this.courseName = courseName;
+        this.courseDetails = courseDetails;
         this.spotsAvailable = spotsAvailable;
         this.spotsTaken = spotsTaken;
         this.instructor = instructor;
     }
 
-    public Course(int courseId, String courseInitials, int courseNumber, String courseName, int spotsAvailable, int spotsTaken, String instructor) {
+    public Course(int courseId, String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTaken, String instructor) {
         this.courseId = courseId;
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
         this.courseName = courseName;
+        this.courseDetails = courseDetails;
         this.spotsAvailable = spotsAvailable;
         this.spotsTaken = spotsTaken;
         this.instructor = instructor;
@@ -69,11 +72,19 @@ public class Course {
         this.courseName = courseName;
     }
 
+    public String getCourseDetails() {
+        return courseDetails;
+    }
+
+    public void setCourseDetails(String courseDetails) {
+        this.courseDetails = courseDetails;
+    }
+
     public int getSpotsAvailable() {
         return spotsAvailable;
     }
 
-    public void setSpotsAvailable(int spotsAvailable) {
+    public void setSpotsAvailable(short spotsAvailable) {
         this.spotsAvailable = spotsAvailable;
     }
 
@@ -81,7 +92,7 @@ public class Course {
         return spotsTaken;
     }
 
-    public void setSpotsTaken(int spotsTaken) {
+    public void setSpotsTaken(short spotsTaken) {
         this.spotsTaken = spotsTaken;
     }
 

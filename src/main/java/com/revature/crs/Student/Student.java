@@ -1,9 +1,9 @@
 package com.revature.crs.Student;
 
 public class Student {
+    private int student_id;
     private String username;
     private String password;
-    private int student_id;
     private String f_name;
     private String l_name;
 
