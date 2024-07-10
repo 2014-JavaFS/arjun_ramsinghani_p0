@@ -12,6 +12,15 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    public void createAccount() {
+        studentService.createAccount();
+        logInAccount();
+    }
+
+    /**
+     * This method details how the student will interact with the login page.
+     * Student can create account if needed.
+     */
     public void logInAccount() {
         System.out.println("Welcome to the Student page!");
         System.out.println("Please enter your credentials.");
@@ -40,12 +49,26 @@ public class StudentController {
         studentHomepage(username);
     }
 
-    public void createAccount() {
-        studentService.createAccount();
-        //studentHomepage();
+    public void viewCourses() {
+        studentService.viewCourses();
     }
 
-    // Completed
+    public void registerForCourseById() {
+        studentService.registerForCourseById();
+    }
+
+    public void cancelCourseRegistrationById() {
+        studentService.cancelCourseRegistrationById();
+    }
+
+    public void viewRegisteredCoursesById() {
+        studentService.viewRegisteredCoursesById();
+    }
+
+    /**
+     * This method shows all possible choices a student can make along with what we can expect for input.
+     * @param username
+     */
     public void studentHomepage(String username) {
         System.out.println("Welcome " + username);
 
@@ -75,32 +98,16 @@ public class StudentController {
                 case 1:
                     viewCourses();
                 case 2:
-                    registerForCourse();
+                    registerForCourseById();
                 case 3:
-                    cancelCourseRegistration();
+                    cancelCourseRegistrationById();
                 case 4:
-                    viewRegisteredCourses();
+                    viewRegisteredCoursesById();
                 case 5:
                     break;
                 default:
                     System.out.println("Invalid Input, Please enter a number from 1-5.");
             }
         } while (choice != 5);
-    }
-
-    public void viewCourses() {
-        studentService.viewCourses();
-    }
-
-    public void registerForCourse() {
-        studentService.registerForCourse();
-    }
-
-    public void cancelCourseRegistration() {
-        studentService.cancelCourseRegistration();
-    }
-
-    public void viewRegisteredCourses() {
-        studentService.viewRegisteredCourses();
     }
 }

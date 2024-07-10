@@ -15,6 +15,9 @@ public class FacultyController {
         this.facultyService = facultyService;
     }
 
+    /**
+     * This method details how the faculty will interact with the login page.
+     */
     public void logInAccount() {
         System.out.println("Welcome to the Faculty page!");
         System.out.println("Please enter your credentials.");
@@ -34,7 +37,22 @@ public class FacultyController {
         facultyHomepage(username);
     }
 
-    // Completed
+    public void createCourse() {
+        facultyService.createCourse();
+    }
+
+    public void updateCourseById() {
+        facultyService.updateCourseById();
+    }
+
+    public void deleteCourseById() {
+        facultyService.deleteCourseById();
+    }
+
+    /**
+     * This method shows all possible choices a faculty can make along with what we can expect for input.
+     * @param username
+     */
     public void facultyHomepage(String username) {
         System.out.println("Welcome " + username);
 
@@ -52,7 +70,7 @@ public class FacultyController {
             System.out.print("Enter your numerical choice from above: ");
 
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid Input. Please enter a number between 1-3.");
+                System.out.println("Invalid Input. Please enter a number between 1-4.");
                 scanner.nextLine();
                 continue;
             }
@@ -63,26 +81,14 @@ public class FacultyController {
                 case 1:
                     createCourse();
                 case 2:
-                    updateCourse();
+                    updateCourseById();
                 case 3:
-                    deleteCourse();
+                    deleteCourseById();
                 case 4:
                     break;
                 default:
                     System.out.println("Invalid Input, Please enter a number from 1-4.");
             }
         } while (choice != 4);
-    }
-
-    public void createCourse() {
-        facultyService.createCourse();
-    }
-
-    public void updateCourse() {
-        facultyService.updateCourse();
-    }
-
-    public void deleteCourse() {
-        facultyService.deleteCourse();
     }
 }
