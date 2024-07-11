@@ -7,7 +7,7 @@ public class Course {
     private String courseName;
     private String courseDetails;
     private short spotsAvailable;
-    private short spotsTaken;
+    private short spotsTotal;
     private String instructor;
 
     public Course() {
@@ -19,24 +19,24 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public Course(String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTaken, String instructor) {
+    public Course(String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTotal, String instructor) {
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
         this.courseName = courseName;
         this.courseDetails = courseDetails;
         this.spotsAvailable = spotsAvailable;
-        this.spotsTaken = spotsTaken;
+        this.spotsTotal = spotsTotal;
         this.instructor = instructor;
     }
 
-    public Course(int courseId, String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTaken, String instructor) {
+    public Course(int courseId, String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTotal, String instructor) {
         this.courseId = courseId;
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
         this.courseName = courseName;
         this.courseDetails = courseDetails;
         this.spotsAvailable = spotsAvailable;
-        this.spotsTaken = spotsTaken;
+        this.spotsTotal = spotsTotal;
         this.instructor = instructor;
     }
 
@@ -80,7 +80,7 @@ public class Course {
         this.courseDetails = courseDetails;
     }
 
-    public int getSpotsAvailable() {
+    public Short getSpotsAvailable() {
         return spotsAvailable;
     }
 
@@ -88,12 +88,12 @@ public class Course {
         this.spotsAvailable = spotsAvailable;
     }
 
-    public int getSpotsTaken() {
-        return spotsTaken;
+    public Short getSpotsTotal() {
+        return spotsTotal;
     }
 
-    public void setSpotsTaken(short spotsTaken) {
-        this.spotsTaken = spotsTaken;
+    public void setSpotsTaken(short spotsTotal) {
+        this.spotsTotal = spotsTotal;
     }
 
     public String getInstructor() {
@@ -112,7 +112,7 @@ public class Course {
                 ", courseNumber=" + courseNumber +
                 ", courseName='" + courseName + '\'' +
                 ", spotsAvailable=" + spotsAvailable +
-                ", spotsTaken=" + spotsTaken +
+                ", spotsTotal=" + spotsTotal +
                 ", instructor='" + instructor + '\'' +
                 '}';
     }

@@ -15,10 +15,10 @@ public class Faculty {
         this.password = password;
     }
 
-    public Faculty(String username, String password, int faculty_id, String f_name, String l_name) {
+    public Faculty(int faculty_id, String username, String password, String f_name, String l_name) {
+        this.faculty_id = faculty_id;
         this.username = username;
         this.password = password;
-        this.faculty_id = faculty_id;
         this.f_name = f_name;
         this.l_name = l_name;
     }
