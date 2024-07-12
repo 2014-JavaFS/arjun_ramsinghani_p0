@@ -1,94 +1,84 @@
 package com.revature.crs.Faculty;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.crs.Course.Course;
-import com.revature.crs.SchoolPlatform;
-
-import java.util.Scanner;
+import com.revature.crs.Student.Student;
+import io.javalin.Javalin;
+import io.javalin.http.Context;
+import io.javalin.http.HttpStatus;
 
 public class FacultyController {
-    public Scanner scanner;
     private final FacultyService facultyService;
-    int choice = 0;
 
-    public FacultyController(Scanner scanner, FacultyService facultyService) {
-        this.scanner = scanner;
+    public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
+    }
+
+    public void registerFacultyPaths(Javalin app) {
+        app.post("/faculties/login", this::getLogInAccount);
+        app.post("/courses", this::postCreateCourse);
+        app.put("/courses/{courseId}", this::putUpdateCourseById);
+        app.delete("/courses/{courseId}", this::deleteCourseById);
+
     }
 
     /**
      * This method details how the faculty will interact with the login page.
      */
-    public void logInAccount() {
-        System.out.println("Welcome to the Faculty page!");
-        System.out.println("Please enter your credentials.");
+    public void getLogInAccount(Context context) throws JsonProcessingException {
+        ObjectMapper map = new ObjectMapper();
+        Faculty faculty = map.readValue(context.body(), Faculty.class);
+        Faculty loggedInFaculty = facultyService.logInAccount(faculty); // will modify once database is done
 
-        System.out.println();
+        if (loggedInFaculty != null) {
+            context.status(HttpStatus.ACCEPTED).json(loggedInFaculty);
+        }
 
-        System.out.println("Username: ");
-        String username = scanner.next();
-
-        System.out.println();
-
-        System.out.println("Password: ");
-        String password = scanner.next();
-
-        // TODO: modify once database is complete
-        facultyService.logInAccount(); // will modify once database is done
-        facultyHomepage(username);
+        else {
+            context.status(HttpStatus.UNAUTHORIZED).result("You do not have access to this account.");
+        }
     }
 
-    public void createCourse() {
-        facultyService.createCourse();
+    public void postCreateCourse(Context context) throws JsonProcessingException {
+        ObjectMapper map = new ObjectMapper();
+        Course course = map.readValue(context.body(), Course.class);
+        Course addedCourse = facultyService.createCourse(course);
+
+        if (addedCourse != null) {
+            context.status(HttpStatus.ACCEPTED).json(addedCourse);
+        }
+
+        else {
+            context.status(HttpStatus.BAD_REQUEST).result("The course has not been added, please try again.");
+        }
     }
 
-    public void updateCourseById() {
-        facultyService.updateCourseById();
+    public void putUpdateCourseById(Context context) throws JsonProcessingException {
+        ObjectMapper map = new ObjectMapper();
+        Course course = map.readValue(context.body(), Course.class);
+        int courseId = Integer.parseInt(context.pathParam("courseId"));
+        Course updatedCourse = facultyService.updateCourseById(courseId, course);
+
+        if (updatedCourse != null) {
+            context.status(HttpStatus.ACCEPTED).json(updatedCourse);
+        }
+
+        else {
+            context.status(HttpStatus.BAD_REQUEST).result("The course could not be updated, please try again");
+        }
     }
 
-    public void deleteCourseById() {
-        facultyService.deleteCourseById();
-    }
+    public void deleteCourseById(Context context) {
+        int courseId = Integer.parseInt(context.pathParam("courseId"));
+        Course deleteCourse = facultyService.deleteCourseById(courseId);
 
-    /**
-     * This method shows all possible choices a faculty can make along with what we can expect for input.
-     * @param username
-     */
-    public void facultyHomepage(String username) {
-        System.out.println("Welcome " + username);
+        if (deleteCourse != null) {
+            context.status(HttpStatus.ACCEPTED).json(deleteCourse);
+        }
 
-        System.out.println();
-
-        do {
-            System.out.println("What would you like to do today?");
-            System.out.println("1. Create a Course");
-            System.out.println("2. Change Course Details");
-            System.out.println("3. Remove a Class");
-            System.out.println("4. Log Out");
-
-            System.out.println();
-
-            System.out.print("Enter your numerical choice from above: ");
-
-            if (!scanner.hasNextInt()) {
-                System.out.println("Invalid Input. Please enter a number between 1-4.");
-                scanner.nextLine();
-                continue;
-            }
-
-            choice = scanner.nextInt();
-
-            switch (choice) {
-                case 1:
-                    createCourse();
-                case 2:
-                    updateCourseById();
-                case 3:
-                    deleteCourseById();
-                case 4:
-                    break;
-                default:
-                    System.out.println("Invalid Input, Please enter a number from 1-4.");
-            }
-        } while (choice != 4);
+        else {
+            context.status(HttpStatus.BAD_REQUEST).result("Deletion was not successful, please try again.");
+        }
     }
 }

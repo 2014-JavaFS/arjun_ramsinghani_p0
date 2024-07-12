@@ -1,5 +1,11 @@
 package com.revature.crs.Student;
 
+import com.revature.crs.Course.Course;
+import com.revature.crs.Exceptions.DataNotFoundException;
+import com.revature.crs.Exceptions.InvalidInputException;
+
+import java.util.List;
+
 /** SERVICE CLASS DOCUMENTATION
  * The Service class is used to define the business logic coming to the backend by use of the Javalin and REST API to the Data Access Object (DAO).
  * Instructions on how each method should interact are within each method call.
@@ -12,19 +18,28 @@ public class StudentService {
         studentDAO = new StudentDAO();
     }
 
-    // TODO: modify once database is complete
-    public void logInAccount() {
+    public Student logInAccount(Student student) {
         // return the account from the database
+        return studentDAO.logInAccount(student);
     }
 
-    // TODO: modify once database is complete
-    public void createAccount() {
+    public Student createAccount(Student student) {
         // return the created account
+        return studentDAO.createAccount(student);
+
     }
 
-    // TODO: modify once database is complete
-    public void viewCourses() {
+    public List<Course> viewCourses() throws DataNotFoundException {
         // return a list of all courses
+        List<Course> courses = studentDAO.viewCourses();
+
+        if (courses.isEmpty()) {
+            throw new DataNotFoundException("No courses available");
+        }
+
+        else {
+            return courses;
+        }
     }
 
     // TODO: modify once database is complete
@@ -40,7 +55,7 @@ public class StudentService {
     }
 
     // TODO: modify once database is complete
-    public void viewRegisteredCoursesById() {
+    public void viewRegisteredCourses() {
         // return a list of all courses the student registered for
     }
 }

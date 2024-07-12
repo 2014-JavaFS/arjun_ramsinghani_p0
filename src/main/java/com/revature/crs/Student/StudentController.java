@@ -1,113 +1,82 @@
 package com.revature.crs.Student;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.crs.Course.Course;
+import com.revature.crs.Exceptions.DataNotFoundException;
+import com.revature.crs.Exceptions.InvalidInputException;
+import io.javalin.Javalin;
+import io.javalin.http.Context;
+import io.javalin.http.HttpStatus;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class StudentController {
-    public Scanner scanner;
     private final StudentService studentService;
     int choice = 0;
 
-    public StudentController(Scanner scanner, StudentService studentService) {
-        this.scanner = scanner;
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
-    public void createAccount() {
-        studentService.createAccount();
-        logInAccount();
+    public void registerStudentPaths(Javalin app) {
+        app.post("/students/login", this::getLogInAccount);
+        app.post("/students/register", this::postCreateAccount);
+        app.get("/courses", this::viewCourses);
+    }
+
+    public void postCreateAccount(Context context) throws JsonProcessingException {
+        ObjectMapper map = new ObjectMapper();
+        Student student = map.readValue(context.body(), Student.class);
+        Student addedStudent = studentService.createAccount(student);
+
+        if (addedStudent != null) {
+            context.status(HttpStatus.ACCEPTED).json(addedStudent);
+        }
+
+        else {
+            context.status(HttpStatus.BAD_REQUEST).result("Creation has failed, please ensure your values are entered properly.");
+        }
     }
 
     /**
      * This method details how the student will interact with the login page.
      * Student can create account if needed.
      */
-    public void logInAccount() {
-        System.out.println("Welcome to the Student page!");
-        System.out.println("Please enter your credentials.");
+    public void getLogInAccount(Context context) throws JsonProcessingException {
+        ObjectMapper map = new ObjectMapper();
+        Student student = map.readValue(context.body(), Student.class);
+        Student loggedInStudent = studentService.logInAccount(student); // will modify once database is done
 
-        System.out.println();
-
-        System.out.println("Do you not have an account (enter y (Yes) or n (No)): ");
-        String character = scanner.next();
-
-        if (character.toLowerCase() == "y") {
-            createAccount();
+        if (loggedInStudent != null) {
+            context.status(HttpStatus.ACCEPTED).json(loggedInStudent);
         }
 
-        System.out.println();
-
-        System.out.println("Username: ");
-        String username = scanner.next();
-
-        System.out.println();
-
-        System.out.println("Password: ");
-        String password = scanner.next();
-
-        // TODO: modify once database is complete
-        studentService.logInAccount(); // will modify once database is done
-        studentHomepage(username);
+        else {
+            context.status(HttpStatus.UNAUTHORIZED).result("You do not have access to this account.");
+        }
     }
 
-    public void viewCourses() {
-        studentService.viewCourses();
+    public void viewCourses(Context context) throws DataNotFoundException {
+        List<Course> courses = studentService.viewCourses();
+        if (courses != null) {
+            context.status(HttpStatus.ACCEPTED).json(courses);
+        }
+
+        else {
+            context.status(HttpStatus.BAD_REQUEST).result("There are no courses available.");
+        }
     }
 
-    public void registerForCourseById() {
+    public void registerForCourseById(Context context) {
         studentService.registerForCourseById();
     }
 
-    public void cancelCourseRegistrationById() {
+    public void cancelCourseRegistrationById(Context context) {
         studentService.cancelCourseRegistrationById();
     }
 
-    public void viewRegisteredCoursesById() {
-        studentService.viewRegisteredCoursesById();
-    }
-
-    /**
-     * This method shows all possible choices a student can make along with what we can expect for input.
-     * @param username
-     */
-    public void studentHomepage(String username) {
-        System.out.println("Welcome " + username);
-
-        System.out.println();
-
-        do {
-            System.out.println("What would you like to do today?");
-            System.out.println("1. View Courses");
-            System.out.println("2. Register for a Course");
-            System.out.println("3. Cancel a Course Registration");
-            System.out.println("4. View Registered Courses");
-            System.out.println("5. Log Out");
-
-            System.out.println();
-
-            System.out.print("Enter your numerical choice from above: ");
-
-            if (!scanner.hasNextInt()) {
-                System.out.println("Invalid Input. Please enter a number between 1-3.");
-                scanner.nextLine();
-                continue;
-            }
-
-            choice = scanner.nextInt();
-
-            switch (choice) {
-                case 1:
-                    viewCourses();
-                case 2:
-                    registerForCourseById();
-                case 3:
-                    cancelCourseRegistrationById();
-                case 4:
-                    viewRegisteredCoursesById();
-                case 5:
-                    break;
-                default:
-                    System.out.println("Invalid Input, Please enter a number from 1-5.");
-            }
-        } while (choice != 5);
+    public void viewRegisteredCourses(Context context) {
     }
 }

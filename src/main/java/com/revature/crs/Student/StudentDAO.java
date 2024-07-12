@@ -19,6 +19,7 @@ public class StudentDAO {
             preparedStatement.setString(3, student.getF_name());
             preparedStatement.setString(4, student.getL_name());
 
+            // Executes query
             preparedStatement.executeUpdate();
 
             // Result Set logic
@@ -76,8 +77,9 @@ public class StudentDAO {
     }
 
     public List<Course> viewCourses() {
-        List<Course> courses = new ArrayList<>();
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
+            List<Course> courses = new ArrayList<>();
+
             String sql = "select * from course;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
@@ -97,13 +99,13 @@ public class StudentDAO {
                 );
                 courses.add(classes);
             }
+            return courses;
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
+            return null;
         }
-
-        return courses;
     }
 
     public void registerCourseById(int course_id) {}

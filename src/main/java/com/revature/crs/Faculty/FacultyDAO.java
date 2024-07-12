@@ -3,6 +3,8 @@ package com.revature.crs.Faculty;
 import com.revature.crs.Course.Course;
 import com.revature.crs.Util.ConnectionUtility;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FacultyDAO {
     public Faculty logInAccount(Faculty faculty) {
@@ -78,7 +80,7 @@ public class FacultyDAO {
         return null;
     }
 
-    public void updateCourseById(int course_id, Course course) {
+    public void updateCourseById(int courseId, Course course) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
             String sql = "update course set spotsAvailable = ? spotsTotal = ? instructor = ? where courseId = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -87,7 +89,7 @@ public class FacultyDAO {
             preparedStatement.setShort(1, course.getSpotsAvailable());
             preparedStatement.setShort(2, course.getSpotsTotal());
             preparedStatement.setString(3, course.getInstructor());
-            preparedStatement.setInt(4, course.getCourseId());
+            preparedStatement.setInt(4, courseId);
 
             preparedStatement.executeUpdate();
         }
@@ -111,5 +113,37 @@ public class FacultyDAO {
         catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    public Course getCourseId(int courseId) {
+        try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
+            String sql = "select * from course where courseId = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            // Prepared Statement will grab our input
+            preparedStatement.setInt(1, courseId);
+
+            // Result Set logic
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Course course = new Course(
+                        resultSet.getInt("courseId"),
+                        resultSet.getString("courseInitials"),
+                        resultSet.getInt("courseNumber"),
+                        resultSet.getString("courseName"),
+                        resultSet.getString("courseDetails"),
+                        resultSet.getShort("spotsAvailable"),
+                        resultSet.getShort("spotsTotal"),
+                        resultSet.getString("instructor")
+                );
+                return course;
+            }
+        }
+
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 }
