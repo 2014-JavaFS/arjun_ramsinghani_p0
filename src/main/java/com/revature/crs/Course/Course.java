@@ -8,7 +8,7 @@ public class Course {
     private String courseDetails;
     private short spotsAvailable;
     private short spotsTotal;
-    private String instructor;
+    private String instructorLastName;
 
     public Course() {
     }
@@ -19,17 +19,17 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public Course(String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTotal, String instructor) {
+    public Course(String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTotal, String instructorLastName) {
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
         this.courseName = courseName;
         this.courseDetails = courseDetails;
         this.spotsAvailable = spotsAvailable;
         this.spotsTotal = spotsTotal;
-        this.instructor = instructor;
+        this.instructorLastName = instructorLastName;
     }
 
-    public Course(int courseId, String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTotal, String instructor) {
+    public Course(int courseId, String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTotal, String instructorLastName) {
         this.courseId = courseId;
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
@@ -37,7 +37,7 @@ public class Course {
         this.courseDetails = courseDetails;
         this.spotsAvailable = spotsAvailable;
         this.spotsTotal = spotsTotal;
-        this.instructor = instructor;
+        this.instructorLastName = instructorLastName;
     }
 
     public int getCourseId() {
@@ -96,12 +96,12 @@ public class Course {
         this.spotsTotal = spotsTotal;
     }
 
-    public String getInstructor() {
-        return instructor;
+    public String getInstructorLastName() {
+        return instructorLastName;
     }
 
-    public void setInstructor(String instructor) {
-        this.instructor = instructor;
+    public void setInstructorLastName(String instructor) {
+        this.instructorLastName = instructorLastName;
     }
 
     @Override
@@ -113,7 +113,7 @@ public class Course {
                 ", courseName='" + courseName + '\'' +
                 ", spotsAvailable=" + spotsAvailable +
                 ", spotsTotal=" + spotsTotal +
-                ", instructor='" + instructor + '\'' +
+                ", instructorLastName='" + instructorLastName + '\'' +
                 '}';
     }
 }

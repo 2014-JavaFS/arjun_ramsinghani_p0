@@ -3,8 +3,6 @@ package com.revature.crs.Faculty;
 import com.revature.crs.Course.Course;
 import com.revature.crs.Util.ConnectionUtility;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FacultyDAO {
     public Faculty logInAccount(Faculty faculty) {
@@ -50,7 +48,7 @@ public class FacultyDAO {
             preparedStatement.setString(4, course.getCourseDetails());
             preparedStatement.setShort(5, course.getSpotsAvailable());
             preparedStatement.setShort(6, course.getSpotsTotal());
-            preparedStatement.setString(7, course.getInstructor());
+            preparedStatement.setString(7, course.getInstructorLastName());
 
             preparedStatement.executeUpdate();
 
@@ -68,7 +66,7 @@ public class FacultyDAO {
                         course.getCourseDetails(),
                         course.getSpotsAvailable(),
                         course.getSpotsTotal(),
-                        course.getInstructor()
+                        course.getInstructorLastName()
                 );
             }
         }
@@ -88,7 +86,7 @@ public class FacultyDAO {
             // Set method, the user input starts at index 1 or 0
             preparedStatement.setShort(1, course.getSpotsAvailable());
             preparedStatement.setShort(2, course.getSpotsTotal());
-            preparedStatement.setString(3, course.getInstructor());
+            preparedStatement.setString(3, course.getInstructorLastName());
             preparedStatement.setInt(4, courseId);
 
             preparedStatement.executeUpdate();
@@ -135,7 +133,7 @@ public class FacultyDAO {
                         resultSet.getString("courseDetails"),
                         resultSet.getShort("spotsAvailable"),
                         resultSet.getShort("spotsTotal"),
-                        resultSet.getString("instructor")
+                        resultSet.getString("instructorLastName")
                 );
                 return course;
             }

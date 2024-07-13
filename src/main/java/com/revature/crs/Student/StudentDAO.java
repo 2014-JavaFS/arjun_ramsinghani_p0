@@ -95,7 +95,7 @@ public class StudentDAO {
                         resultSet.getString("courseDetails"),
                         resultSet.getShort("spotsAvailable"),
                         resultSet.getShort("spotsTotal"),
-                        resultSet.getString("instructor")
+                        resultSet.getString("instructorLastName")
                 );
                 courses.add(classes);
             }
