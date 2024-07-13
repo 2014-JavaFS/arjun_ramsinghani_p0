@@ -26,7 +26,7 @@ public class StudentController {
         app.get("/courses", this::viewCourses);
     }
 
-    public void postCreateAccount(Context context) throws JsonProcessingException {
+    public void postCreateAccount(Context context) throws JsonProcessingException, InvalidInputException {
         ObjectMapper map = new ObjectMapper();
         Student student = map.readValue(context.body(), Student.class);
         Student addedStudent = studentService.createAccount(student);
@@ -78,5 +78,6 @@ public class StudentController {
     }
 
     public void viewRegisteredCourses(Context context) {
+        studentService.viewRegisteredCourses();
     }
 }

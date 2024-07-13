@@ -3,7 +3,6 @@ package com.revature.crs.Student;
 import com.revature.crs.Course.Course;
 import com.revature.crs.Exceptions.DataNotFoundException;
 import com.revature.crs.Exceptions.InvalidInputException;
-
 import java.util.List;
 
 /** SERVICE CLASS DOCUMENTATION
@@ -23,10 +22,13 @@ public class StudentService {
         return studentDAO.logInAccount(student);
     }
 
-    public Student createAccount(Student student) {
+    public Student createAccount(Student student) throws InvalidInputException {
         // return the created account
-        return studentDAO.createAccount(student);
+        if ((student.getUsername() == "") || (student.getPassword() == "") || (student.getF_name() == "") || (student.getL_name() == "")) {
+            throw new InvalidInputException("One or more fields are null");
+        }
 
+        return studentDAO.createAccount(student);
     }
 
     public List<Course> viewCourses() throws DataNotFoundException {
@@ -52,6 +54,7 @@ public class StudentService {
     public void cancelCourseRegistrationById() {
         // find in registered courses
         // return updated registration
+        studentDAO.viewRegisteredCourses();
     }
 
     // TODO: modify once database is complete

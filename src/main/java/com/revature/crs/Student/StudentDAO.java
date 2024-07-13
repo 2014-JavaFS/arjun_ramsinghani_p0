@@ -108,7 +108,26 @@ public class StudentDAO {
         }
     }
 
-    public void registerCourseById(int course_id) {}
+    public void registerCourseById(int course_id) {
+        try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
+            String sql = "select * from course where courseId = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            // Set method, the user input starts at index 1 or 0
+            preparedStatement.setInt(1, course_id);
+
+            // Result Set logic
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+        }
+
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
+        //return null;
+    }
 
     public void cancelCourseRegistrationById(int course_id) {}
 

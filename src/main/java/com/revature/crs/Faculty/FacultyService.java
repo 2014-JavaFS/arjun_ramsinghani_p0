@@ -20,6 +20,10 @@ public class FacultyService {
 
     public Course createCourse(Course course) {
         // return the created course
+        if ((course.getCourseInitials() == "") || (course.getCourseName() == "") || (course.getCourseDetails() == "") || (course.getInstructor() == "")) {
+            return null;
+        }
+
         return facultyDAO.createCourse(course);
     }
 
@@ -27,6 +31,12 @@ public class FacultyService {
         // return the updated course
         // here we can actually write the update course method to actually return a course
         // can do by id
+        Course existingCourse = facultyDAO.getCourseId(courseId);
+
+        if (existingCourse == null) {
+            return null;
+        }
+
         facultyDAO.updateCourseById(courseId, course);
         return facultyDAO.getCourseId(courseId);
     }
