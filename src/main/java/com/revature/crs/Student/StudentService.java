@@ -3,6 +3,9 @@ package com.revature.crs.Student;
 import com.revature.crs.Course.Course;
 import com.revature.crs.Exceptions.DataNotFoundException;
 import com.revature.crs.Exceptions.InvalidInputException;
+import com.revature.crs.Registration.Registration;
+
+import javax.security.sasl.AuthenticationException;
 import java.util.List;
 
 /** SERVICE CLASS DOCUMENTATION
@@ -17,9 +20,15 @@ public class StudentService {
         studentDAO = new StudentDAO();
     }
 
-    public Student logInAccount(Student student) {
+    public Student logInAccount(String username, String password) throws AuthenticationException {
         // return the account from the database
-        return studentDAO.logInAccount(student);
+        Student student = studentDAO.logInAccount(username, password);
+
+        if (student == null) {
+            throw new AuthenticationException("Invalid input. Please try again.");
+        }
+
+        return student;
     }
 
     public Student createAccount(Student student) throws InvalidInputException {
@@ -51,14 +60,23 @@ public class StudentService {
     }
 
     // TODO: modify once database is complete
-    public void cancelCourseRegistrationById() {
+    public void cancelCourseRegistrationById(int course_id) {
         // find in registered courses
         // return updated registration
-        studentDAO.viewRegisteredCourses();
+        studentDAO.cancelCourseRegistrationById(course_id);
     }
 
     // TODO: modify once database is complete
-    public void viewRegisteredCourses() {
+    public List<Registration> viewRegisteredCourses() throws DataNotFoundException {
         // return a list of all courses the student registered for
+        List<Registration> registrations = studentDAO.viewRegisteredCourses();
+
+        if (registrations.isEmpty()) {
+            throw new DataNotFoundException("There are no courses registered to your name, please register a course then try again");
+        }
+
+        else {
+            return registrations;
+        }
     }
 }

@@ -1,39 +1,42 @@
 package com.revature.crs.Faculty;
 
 import com.revature.crs.Course.Course;
+import com.revature.crs.Exceptions.DataNotFoundException;
 import com.revature.crs.Util.ConnectionUtility;
 import java.sql.*;
 
 public class FacultyDAO {
-    public Faculty logInAccount(Faculty faculty) {
+    public Faculty logInAccount(String username, String password) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
             String sql = "select * from faculty where username = ? AND password = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
-            preparedStatement.setString(1, faculty.getUsername());
-            preparedStatement.setString(2, faculty.getPassword());
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
 
             // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                Faculty faculties = new Faculty(
-                        resultSet.getInt("faculty_id"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getString("f_name"),
-                        resultSet.getString("l_name")
-                );
-                return faculties;
+            while (!resultSet.next()) {
+                throw new DataNotFoundException("No member with that info found");
             }
+
+            Faculty faculty = new Faculty();
+
+            faculty.setFaculty_id(resultSet.getInt("faculty_id"));
+            faculty.setUsername(resultSet.getString("username"));
+            faculty.setPassword(resultSet.getString("password"));
+            faculty.setF_name(resultSet.getString("f_name"));
+            faculty.setL_name(resultSet.getString("l_name"));
+
+            return faculty;
         }
 
-        catch (SQLException e) {
+        catch (SQLException | DataNotFoundException e) {
             System.err.println(e.getMessage());
+            return null;
         }
-
-        return null;
     }
 
     public Course createCourse(Course course) {
@@ -80,7 +83,7 @@ public class FacultyDAO {
 
     public void updateCourseById(int courseId, Course course) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "update course set spotsAvailable = ? spotsTotal = ? instructor = ? where courseId = ?;";
+            String sql = "update course set spotsAvailable = ? where course_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
@@ -97,13 +100,13 @@ public class FacultyDAO {
         }
     }
 
-    public void deleteCourseById(int courseId) {
+    public void deleteCourseById(int course_id) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "delete from course where courseId = ?;";
+            String sql = "delete from course_student where course_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
-            preparedStatement.setInt(1, courseId);
+            preparedStatement.setInt(1, course_id);
 
             preparedStatement.executeUpdate();
         }
@@ -115,7 +118,7 @@ public class FacultyDAO {
 
     public Course getCourseId(int courseId) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "select * from course where courseId = ?;";
+            String sql = "select * from course where course_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Prepared Statement will grab our input
@@ -126,14 +129,14 @@ public class FacultyDAO {
 
             while (resultSet.next()) {
                 Course course = new Course(
-                        resultSet.getInt("courseId"),
+                        resultSet.getInt("course_id"),
                         resultSet.getString("courseInitials"),
                         resultSet.getInt("courseNumber"),
                         resultSet.getString("courseName"),
                         resultSet.getString("courseDetails"),
                         resultSet.getShort("spotsAvailable"),
                         resultSet.getShort("spotsTotal"),
-                        resultSet.getString("instructorLastName")
+                        resultSet.getString("instructor")
                 );
                 return course;
             }

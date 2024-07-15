@@ -1,12 +1,10 @@
 package com.revature.crs.Faculty;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.crs.Course.Course;
-import com.revature.crs.Student.Student;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
+import javax.security.sasl.AuthenticationException;
 
 public class FacultyController {
     private final FacultyService facultyService;
@@ -17,60 +15,44 @@ public class FacultyController {
 
     public void registerFacultyPaths(Javalin app) {
         app.post("/faculties/login", this::getLogInAccount);
-        app.post("/courses", this::postCreateCourse);
-        app.put("/courses/{courseId}", this::putUpdateCourseById);
-        app.delete("/courses/{courseId}", this::deleteCourseById);
+        app.post("/faculties/courses", this::postCreateCourse);
+        app.put("/faculties/courses/{courseId}", this::putUpdateCourseById);
+        app.delete("/faculties/courses/{courseId}", this::deleteCourseById);
 
     }
 
     /**
      * This method details how the faculty will interact with the login page.
      */
-    public void getLogInAccount(Context context) throws JsonProcessingException {
-        ObjectMapper map = new ObjectMapper(); // maps data from an OOP to the database
-        Faculty faculty = map.readValue(context.body(), Faculty.class); // reads class template and the context from postman
-        Faculty loggedInFaculty = facultyService.logInAccount(faculty); // will modify once database is done
+    public void getLogInAccount(Context context) {
+        String username = context.queryParam("username");
+        String password = context.queryParam("password");
 
-        if (loggedInFaculty != null) {
-            context.status(HttpStatus.ACCEPTED).json(loggedInFaculty);
+        try {
+            Faculty faculty = facultyService.logInAccount(username, password);
+            context.header("username", faculty.getUsername());
+            context.header("password", faculty.getPassword());
+            context.status(HttpStatus.ACCEPTED);
         }
 
-        else {
-            context.status(HttpStatus.UNAUTHORIZED).result("You do not have access to this account.");
-        }
-    }
-
-    public void postCreateCourse(Context context) throws JsonProcessingException {
-        ObjectMapper map = new ObjectMapper(); // maps data from an OOP to the database
-        Course course = map.readValue(context.body(), Course.class); // reads class template and the context from postman
-        Course addedCourse = facultyService.createCourse(course);
-
-        if (addedCourse != null) {
-            context.status(HttpStatus.CREATED).json(addedCourse);
-        }
-
-        else {
-            context.status(HttpStatus.BAD_REQUEST).result("The course has not been added, please try again.");
+        catch (AuthenticationException e) {
+            context.status(HttpStatus.UNAUTHORIZED);
         }
     }
 
-    public void putUpdateCourseById(Context context) throws JsonProcessingException {
-        ObjectMapper map = new ObjectMapper(); // maps data from an OOP to the database
-        Course course = map.readValue(context.body(), Course.class); // reads class template and the context from postman
-        int courseId = Integer.parseInt(context.pathParam("courseId")); // parses data through the specified
-        Course updatedCourse = facultyService.updateCourseById(courseId, course);
+    public void postCreateCourse(Context context) {
+        Course course = context.bodyAsClass(Course.class);
+        context.json(facultyService.createCourse(course));
+    }
 
-        if (updatedCourse != null) {
-            context.status(HttpStatus.ACCEPTED).json(updatedCourse);
-        }
-
-        else {
-            context.status(HttpStatus.BAD_REQUEST).result("The course could not be updated, please try again");
-        }
+    public void putUpdateCourseById(Context context) {
+        int updatedCourse = Integer.parseInt(context.pathParam("course_id"));
+        Course foundCourse = facultyService.getCourseById(updatedCourse);
+        context.json(foundCourse);
     }
 
     public void deleteCourseById(Context context) {
-        int courseId = Integer.parseInt(context.pathParam("courseId")); // parses data through the specified
+        int courseId = Integer.parseInt(context.pathParam("course_id")); // parses data through the specified
         Course deleteCourse = facultyService.deleteCourseById(courseId);
 
         if (deleteCourse != null) {

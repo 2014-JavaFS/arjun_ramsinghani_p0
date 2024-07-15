@@ -1,20 +1,17 @@
 package com.revature.crs.Student;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.crs.Course.Course;
 import com.revature.crs.Exceptions.DataNotFoundException;
 import com.revature.crs.Exceptions.InvalidInputException;
+import com.revature.crs.Registration.Registration;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-
+import javax.security.sasl.AuthenticationException;
 import java.util.List;
-import java.util.Scanner;
 
 public class StudentController {
     private final StudentService studentService;
-    int choice = 0;
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -22,44 +19,47 @@ public class StudentController {
 
     public void registerStudentPaths(Javalin app) {
         app.post("/students/login", this::getLogInAccount);
-        app.post("/students/register", this::postCreateAccount);
-        app.get("/courses", this::viewCourses);
+        app.post("/students/registerAccount", this::postCreateAccount);
+        app.get("/students/courses", this::viewCourses);
+        app.post("/students/registerCourse", this::registerForCourseById);
+        app.delete("/students/cancelRegisteredCourse", this::cancelCourseRegistrationById);
+        app.get("/students/courses/registered", this::viewRegisteredCourses);
     }
 
-    public void postCreateAccount(Context context) throws JsonProcessingException, InvalidInputException {
-        ObjectMapper map = new ObjectMapper();
-        Student student = map.readValue(context.body(), Student.class);
-        Student addedStudent = studentService.createAccount(student);
+    public void postCreateAccount(Context context) throws InvalidInputException {
+        Student student = context.bodyAsClass(Student.class);
+        context.json(studentService.createAccount(student));
 
-        if (addedStudent != null) {
-            context.status(HttpStatus.CREATED).json(addedStudent);
+        if (studentService.createAccount(student) == null) {
+            context.status(HttpStatus.FORBIDDEN);
         }
 
-        else {
-            context.status(HttpStatus.BAD_REQUEST).result("Creation has failed, please ensure your values are entered properly.");
-        }
+        context.status(HttpStatus.CREATED);
     }
 
     /**
      * This method details how the student will interact with the login page.
      * Student can create account if needed.
      */
-    public void getLogInAccount(Context context) throws JsonProcessingException {
-        ObjectMapper map = new ObjectMapper();
-        Student student = map.readValue(context.body(), Student.class);
-        Student loggedInStudent = studentService.logInAccount(student); // will modify once database is done
+    public void getLogInAccount(Context context) {
+        String username = context.queryParam("username");
+        String password = context.queryParam("password");
 
-        if (loggedInStudent != null) {
-            context.status(HttpStatus.ACCEPTED).json(loggedInStudent);
+        try {
+            Student student = studentService.logInAccount(username, password);
+            context.header("username", student.getUsername());
+            context.header("password", student.getPassword());
+            context.status(HttpStatus.ACCEPTED);
         }
 
-        else {
-            context.status(HttpStatus.UNAUTHORIZED).result("You do not have access to this account.");
+        catch (AuthenticationException e) {
+            context.status(HttpStatus.UNAUTHORIZED);
         }
     }
 
     public void viewCourses(Context context) throws DataNotFoundException {
         List<Course> courses = studentService.viewCourses();
+
         if (courses != null) {
             context.status(HttpStatus.ACCEPTED).json(courses);
         }
@@ -71,13 +71,23 @@ public class StudentController {
 
     public void registerForCourseById(Context context) {
         studentService.registerForCourseById();
+        context.status(HttpStatus.ACCEPTED);
     }
 
     public void cancelCourseRegistrationById(Context context) {
-        studentService.cancelCourseRegistrationById();
+        int course_id = Integer.parseInt(context.pathParam("course_id"));
+        studentService.cancelCourseRegistrationById(course_id);
     }
 
-    public void viewRegisteredCourses(Context context) {
-        studentService.viewRegisteredCourses();
+    public void viewRegisteredCourses(Context context) throws DataNotFoundException {
+        List<Registration> registrations = studentService.viewRegisteredCourses();
+
+        if (registrations != null) {
+            context.status(HttpStatus.ACCEPTED);
+        }
+
+        else {
+            context.status(HttpStatus.NOT_FOUND);
+        }
     }
 }

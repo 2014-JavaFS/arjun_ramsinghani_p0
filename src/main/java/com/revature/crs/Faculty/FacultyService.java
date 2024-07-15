@@ -2,6 +2,8 @@ package com.revature.crs.Faculty;
 
 import com.revature.crs.Course.Course;
 
+import javax.security.sasl.AuthenticationException;
+
 /** SERVICE CLASS DOCUMENTATION
  * The Service class is used to define the business logic coming to the backend by use of the Javalin and REST API to the Data Access Object (DAO).
  * Instructions on how each method should interact are within each method call.
@@ -13,14 +15,20 @@ public class FacultyService {
         facultyDAO = new FacultyDAO();
     }
 
-    public Faculty logInAccount(Faculty faculty) {
+    public Faculty logInAccount(String username, String password) throws AuthenticationException {
         // return the account from the database
-        return facultyDAO.logInAccount(faculty);
+        Faculty faculty = facultyDAO.logInAccount(username, password);
+
+        if (faculty == null) {
+            throw new AuthenticationException("Invalid input. Please try again.");
+        }
+
+        return faculty;
     }
 
     public Course createCourse(Course course) {
         // return the created course
-        if ((course.getCourseInitials() == "") || (course.getCourseName() == "") || (course.getCourseDetails() == "") || (course.getInstructor() == "")) {
+        if ((course.getCourseInitials() == "") || (course.getCourseName() == "") || (course.getCourseDetails() == "") || (course.getInstructorLastName() == "")) {
             return null;
         }
 
@@ -53,5 +61,9 @@ public class FacultyService {
 
         facultyDAO.deleteCourseById(courseId);
         return deletedCourse;
+    }
+
+    public Course getCourseById(int courseId) {
+        return facultyDAO.getCourseId(courseId);
     }
 }
