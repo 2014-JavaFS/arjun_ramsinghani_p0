@@ -27,8 +27,8 @@ public class FacultyController {
      * This method details how the faculty will interact with the login page.
      */
     public void getLogInAccount(Context context) throws JsonProcessingException {
-        ObjectMapper map = new ObjectMapper();
-        Faculty faculty = map.readValue(context.body(), Faculty.class);
+        ObjectMapper map = new ObjectMapper(); // maps data from an OOP to the database
+        Faculty faculty = map.readValue(context.body(), Faculty.class); // reads class template and the context from postman
         Faculty loggedInFaculty = facultyService.logInAccount(faculty); // will modify once database is done
 
         if (loggedInFaculty != null) {
@@ -41,12 +41,12 @@ public class FacultyController {
     }
 
     public void postCreateCourse(Context context) throws JsonProcessingException {
-        ObjectMapper map = new ObjectMapper();
-        Course course = map.readValue(context.body(), Course.class);
+        ObjectMapper map = new ObjectMapper(); // maps data from an OOP to the database
+        Course course = map.readValue(context.body(), Course.class); // reads class template and the context from postman
         Course addedCourse = facultyService.createCourse(course);
 
         if (addedCourse != null) {
-            context.status(HttpStatus.ACCEPTED).json(addedCourse);
+            context.status(HttpStatus.CREATED).json(addedCourse);
         }
 
         else {
@@ -55,9 +55,9 @@ public class FacultyController {
     }
 
     public void putUpdateCourseById(Context context) throws JsonProcessingException {
-        ObjectMapper map = new ObjectMapper();
-        Course course = map.readValue(context.body(), Course.class);
-        int courseId = Integer.parseInt(context.pathParam("courseId"));
+        ObjectMapper map = new ObjectMapper(); // maps data from an OOP to the database
+        Course course = map.readValue(context.body(), Course.class); // reads class template and the context from postman
+        int courseId = Integer.parseInt(context.pathParam("courseId")); // parses data through the specified
         Course updatedCourse = facultyService.updateCourseById(courseId, course);
 
         if (updatedCourse != null) {
@@ -70,7 +70,7 @@ public class FacultyController {
     }
 
     public void deleteCourseById(Context context) {
-        int courseId = Integer.parseInt(context.pathParam("courseId"));
+        int courseId = Integer.parseInt(context.pathParam("courseId")); // parses data through the specified
         Course deleteCourse = facultyService.deleteCourseById(courseId);
 
         if (deleteCourse != null) {

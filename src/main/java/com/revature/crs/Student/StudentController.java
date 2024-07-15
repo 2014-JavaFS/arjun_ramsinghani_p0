@@ -32,7 +32,7 @@ public class StudentController {
         Student addedStudent = studentService.createAccount(student);
 
         if (addedStudent != null) {
-            context.status(HttpStatus.ACCEPTED).json(addedStudent);
+            context.status(HttpStatus.CREATED).json(addedStudent);
         }
 
         else {

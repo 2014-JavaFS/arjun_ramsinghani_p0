@@ -28,6 +28,12 @@ create table course(
 	instructor varchar(40) not null
 );
 
-insert into faculty (faculty_id, username, password, f_name, l_name) values (default, 'cjester', 'Pass@123!', 'Charles', 'Jester');
+-- INSERT statements
+insert into student values (default, 'aramsing', 'bhopal@4321', 'Arjun', 'Ramsinghani');
+insert into faculty values (default, 'cjester', 'philly@8567', 'Charles', 'Jester');
+insert into faculty values (default, 'kmarx', 'c0mmun!sm', 'Karl', 'Marx');
+insert into course values (default, 'SWE', 8750, 'Infosys Training Full Stack', 'A course to prepare students for Infosys', 25, 24, 'Charles Jester');
+insert into course values (default, 'POLS', 1011, 'An Introduction to Communism', 'An introductory course in how to create a Communist Government', 25, 25, 'Karl Marx');
 
-select * from faculty where username = 'cjester' and password = 'Pass@123!';
+-- UPDATE statments
+update course set courseNumber = 2300 where instructor = 'Karl Marx';
