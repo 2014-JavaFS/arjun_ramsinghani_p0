@@ -100,7 +100,7 @@ public class Course {
         return instructorLastName;
     }
 
-    public void setInstructorLastName(String instructor) {
+    public void setInstructorLastName(String instructorLastName) {
         this.instructorLastName = instructorLastName;
     }
 

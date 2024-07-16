@@ -1,7 +1,6 @@
 package com.revature.crs.Student;
 
 import com.revature.crs.Course.Course;
-import com.revature.crs.Exceptions.DataNotFoundException;
 import com.revature.crs.Exceptions.InvalidInputException;
 import com.revature.crs.Registration.Registration;
 
@@ -43,28 +42,27 @@ public class StudentService {
     public List<Course> viewCourses() {
         // return a list of all courses
         return studentDAO.viewCourses();
-
-//        if (courses.isEmpty()) {
-//            throw new DataNotFoundException("No courses available");
-//        }
-//
-//        else {
-//            return courses;
-//        }
     }
 
     // TODO: modify once database is complete
-    public void registerForCourseById(Registration registration) {
+    public Registration registerForCourseById(Registration registration) {
         // find course by id through view courses
         // return updated registration
-        studentDAO.registerCourseById(registration);
+        return studentDAO.registerCourseById(registration);
     }
 
     // TODO: modify once database is complete
-    public void cancelCourseRegistrationById(int course_id) {
+    public Registration cancelCourseRegistrationById(int registration_id) {
         // find in registered courses
         // return updated registration
-        studentDAO.cancelCourseRegistrationById(course_id);
+        Registration deletedRegistration = studentDAO.getRegistrationId(registration_id);
+
+        if (deletedRegistration == null) {
+            return null;
+        }
+
+        studentDAO.cancelCourseRegistrationById(registration_id);
+        return deletedRegistration;
     }
 
     // TODO: modify once database is complete

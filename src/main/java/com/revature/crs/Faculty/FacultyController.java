@@ -14,11 +14,10 @@ public class FacultyController {
     }
 
     public void registerFacultyPaths(Javalin app) {
-        app.post("/faculties/login", this::getLogInAccount);
-        app.post("/faculties/courses", this::postCreateCourse);
+        app.post("/faculties/login", this::getLogInAccount); //done
+        app.post("/faculties/courses", this::postCreateCourse); //done
         app.put("/faculties/coursesUpdate/{course_id}", this::putUpdateCourseById);
-        app.delete("/faculties/coursesDelete/{course_id}", this::deleteCourseById);
-
+        app.delete("/faculties/coursesDelete/{course_id}", this::deleteCourseById); //done
     }
 
     /**
@@ -32,7 +31,7 @@ public class FacultyController {
             Faculty faculty = facultyService.logInAccount(username, password);
             context.header("username", faculty.getUsername());
             context.header("password", faculty.getPassword());
-            context.status(HttpStatus.ACCEPTED);
+            context.status(HttpStatus.ACCEPTED).result("Successful login");
         }
 
         catch (AuthenticationException e) {
@@ -41,15 +40,33 @@ public class FacultyController {
     }
 
     public void postCreateCourse(Context context) {
+        // Body as Class takes the body from an http request and maps it to an argument class through a Reflection API
+        // allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters
         Course course = context.bodyAsClass(Course.class);
-        context.json(facultyService.createCourse(course));
-        context.status(HttpStatus.CREATED);
+        //Course course = new Course();
+        Course addCourse = facultyService.createCourse(course);
+
+        if (addCourse != null) {
+            context.status(HttpStatus.CREATED).json(addCourse);
+        }
+
+        else {
+            context.status(HttpStatus.BAD_REQUEST).result("Course creation failed");
+        }
     }
 
     public void putUpdateCourseById(Context context) {
-        int updatedCourse = Integer.parseInt(context.pathParam("course_id"));
-        Course foundCourse = facultyService.getCourseById(updatedCourse);
-        context.json(foundCourse);
+        int updatedCourseId = Integer.parseInt(context.pathParam("course_id"));
+        Course foundCourse = facultyService.getCourseById(updatedCourseId);
+        Course newCourse = facultyService.updateCourseById(updatedCourseId, foundCourse);
+
+        if (newCourse != null) {
+            context.status(HttpStatus.OK).json(newCourse);
+        }
+
+        else {
+            context.status(HttpStatus.NOT_FOUND).result("Course was not successfully updated");
+        }
     }
 
     public void deleteCourseById(Context context) {

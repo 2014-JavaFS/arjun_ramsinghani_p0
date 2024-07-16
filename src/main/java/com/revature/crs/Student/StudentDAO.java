@@ -143,13 +143,13 @@ public class StudentDAO {
         return registration;
     }
 
-    public void cancelCourseRegistrationById(int course_id) {
+    public void cancelCourseRegistrationById(int registration_id) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "delete from course_student where course_id = ?;";
+            String sql = "delete from course_student where registration_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
-            preparedStatement.setInt(1, course_id);
+            preparedStatement.setInt(1, registration_id);
 
             preparedStatement.executeUpdate();
         }
@@ -184,5 +184,32 @@ public class StudentDAO {
             System.err.println(e.getMessage());
             return null;
         }
+    }
+
+    public Registration getRegistrationId(int registration_id) {
+        try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
+            String sql = "select * from course_student where registration_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            // Prepared Statement will grab our input
+            preparedStatement.setInt(1, registration_id);
+
+            // Result Set logic
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Registration registration = new Registration(
+                        resultSet.getInt("registration_id"),
+                        resultSet.getInt("course_id"),
+                        resultSet.getInt("student_id")
+                );
+                return registration;
+            }
+        }
+
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 }

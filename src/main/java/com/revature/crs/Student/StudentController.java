@@ -17,12 +17,12 @@ public class StudentController {
     }
 
     public void registerStudentPaths(Javalin app) {
-        app.post("/students/login", this::getLogInAccount);
-        app.post("/students/registerAccount", this::postCreateAccount);
-        app.get("/students/courses", this::viewCourses);
-        app.post("/students/registerCourse", this::registerForCourseById);
-        app.delete("/students/cancelRegisteredCourse/{course_id}", this::cancelCourseRegistrationById);
-        app.get("/students/{student_id}/coursesRegistered", this::viewRegisteredCourses);
+        app.post("/students/login", this::getLogInAccount); //done
+        app.post("/students/registerAccount", this::postCreateAccount); //done
+        app.get("/students/courses", this::viewCourses); //done
+        app.post("/students/registerCourse", this::registerForCourseById); //done
+        app.delete("/students/cancelRegisteredCourse/{course_id}", this::cancelCourseRegistrationById); //done
+        app.get("/students/{student_id}/coursesRegistered", this::viewRegisteredCourses); //done
     }
 
     public void postCreateAccount(Context context) throws InvalidInputException {
@@ -48,7 +48,7 @@ public class StudentController {
             Student student = studentService.logInAccount(username, password);
             context.header("username", student.getUsername());
             context.header("password", student.getPassword());
-            context.status(HttpStatus.ACCEPTED);
+            context.status(HttpStatus.ACCEPTED).result("Successful login");
         }
 
         catch (AuthenticationException e) {
@@ -64,19 +64,29 @@ public class StudentController {
         }
 
         else {
-            context.status(HttpStatus.BAD_REQUEST).result("There are no courses available.");
+            context.status(HttpStatus.NOT_FOUND).result("There are no courses available.");
         }
     }
 
     public void registerForCourseById(Context context) {
+        // Body as Class takes the body from an http request and maps it to an argument class through a Reflection API
+        // allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters
         Registration registration = context.bodyAsClass(Registration.class);
-        studentService.registerForCourseById(registration);
-        context.status(HttpStatus.ACCEPTED);
+        Registration newRegistration = studentService.registerForCourseById(registration);
+
+        if (newRegistration != null) {
+            context.status(HttpStatus.CREATED).json(newRegistration);
+        }
+
+        else {
+            context.status(HttpStatus.BAD_REQUEST).result("Course was not successfully registered");
+        }
     }
 
     public void cancelCourseRegistrationById(Context context) {
         int course_id = Integer.parseInt(context.pathParam("course_id"));
-        studentService.cancelCourseRegistrationById(course_id);
+        Registration deletedRegistration = studentService.cancelCourseRegistrationById(course_id);
+        context.status(HttpStatus.OK).json(deletedRegistration);
     }
 
     public void viewRegisteredCourses(Context context) {
