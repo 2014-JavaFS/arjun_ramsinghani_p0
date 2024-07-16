@@ -68,22 +68,23 @@ public class FacultyDAO {
         }
     }
 
-    public void updateCourseById(int courseId, Course course) {
+    public boolean updateCourseById(int courseId, Course course) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "update course set spotsTaken = ? where course_id = ?;";
+            String sql = "update course set spotsTotal = ? where course_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
-            preparedStatement.setShort(1, course.getSpotsTaken());
-            preparedStatement.setShort(2, course.getSpotsTotal());
-            preparedStatement.setString(3, course.getInstructorLastName());
-            preparedStatement.setInt(4, courseId);
+            preparedStatement.setShort(1, course.getSpotsTotal());
+            preparedStatement.setInt(2, courseId);
 
             preparedStatement.executeUpdate();
+
+            return true;
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
+            return false;
         }
     }
 

@@ -28,25 +28,24 @@ public class FacultyService {
 
     public Course createCourse(Course course) {
         // return the created course
-        if ((course.getCourseInitials() == "") || (course.getCourseName() == "") || (course.getCourseDetails() == "") || (course.getInstructorLastName() == "") || (course.getSpotsTotal() == 0) || (course.getCourseNumber() == 0)) {
+        if ((course.getCourseInitials() == "") || (course.getCourseName() == "") || (course.getCourseDetails() == "") || (course.getInstructorLastName() == "") || (course.getSpotsTotal() == 0)) {
             return null;
         }
 
         return facultyDAO.createCourse(course);
     }
 
-    public Course updateCourseById(int courseId, Course course) {
+    public boolean updateCourseById(int course_id, Course course) {
         // return the updated course
         // here we can actually write the update course method to actually return a course
         // can do by id
-        Course existingCourse = facultyDAO.getCourseId(courseId);
+        Course existingCourse = facultyDAO.getCourseId(course_id);
 
         if (existingCourse == null) {
-            return null;
+            return false;
         }
 
-        facultyDAO.updateCourseById(courseId, course);
-        return facultyDAO.getCourseId(courseId);
+        return facultyDAO.updateCourseById(course_id, course);
     }
 
     public Course deleteCourseById(int courseId) {

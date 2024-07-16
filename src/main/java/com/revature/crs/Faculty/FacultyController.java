@@ -16,7 +16,7 @@ public class FacultyController {
     public void registerFacultyPaths(Javalin app) {
         app.post("/faculties/login", this::getLogInAccount); //done
         app.post("/faculties/courses", this::postCreateCourse); //done
-        app.put("/faculties/coursesUpdate/{course_id}", this::putUpdateCourseById);
+        app.put("/faculties/coursesUpdate/{course_id}", this::putUpdateCourseById); //done
         app.delete("/faculties/coursesDelete/{course_id}", this::deleteCourseById); //done
     }
 
@@ -39,8 +39,12 @@ public class FacultyController {
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     public void postCreateCourse(Context context) {
-        // Body as Class takes the body from an http request and maps it to an argument class through a Reflection API
+        // Body as Class takes the body from a http request and maps it to an argument class through a Reflection API
         // allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters
         Course course = context.bodyAsClass(Course.class);
         //Course course = new Course();
@@ -55,13 +59,18 @@ public class FacultyController {
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     public void putUpdateCourseById(Context context) {
         int updatedCourseId = Integer.parseInt(context.pathParam("course_id"));
-        Course foundCourse = facultyService.getCourseById(updatedCourseId);
-        Course newCourse = facultyService.updateCourseById(updatedCourseId, foundCourse);
+        Course updateCourse = context.bodyAsClass(Course.class);
+        boolean checkUpdate = facultyService.updateCourseById(updatedCourseId, updateCourse);
 
-        if (newCourse != null) {
-            context.status(HttpStatus.OK).json(newCourse);
+        if (checkUpdate == true) {
+            Course foundCourse = facultyService.getCourseById(updatedCourseId);
+            context.status(HttpStatus.OK).json(foundCourse);
         }
 
         else {
@@ -69,6 +78,10 @@ public class FacultyController {
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     public void deleteCourseById(Context context) {
         int courseId = Integer.parseInt(context.pathParam("course_id")); // parses data through the specified
         Course deleteCourse = facultyService.deleteCourseById(courseId);
