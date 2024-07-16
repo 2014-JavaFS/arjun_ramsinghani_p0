@@ -66,6 +66,7 @@ select * from faculty;
 select * from student;
 select * from course;
 select * from student where username = 'kayshova' AND password = 'toledo@8765';
+select * from course_student;
 
 -- DELETE statements
 delete from student where student_id = 2;
