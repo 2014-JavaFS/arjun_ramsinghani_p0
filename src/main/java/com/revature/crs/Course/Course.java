@@ -6,7 +6,7 @@ public class Course {
     private int courseNumber;
     private String courseName;
     private String courseDetails;
-    private short spotsAvailable;
+    private short spotsTaken;
     private short spotsTotal;
     private String instructorLastName;
 
@@ -19,23 +19,23 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public Course(String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTotal, String instructorLastName) {
+    public Course(String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsTaken, short spotsTotal, String instructorLastName) {
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
         this.courseName = courseName;
         this.courseDetails = courseDetails;
-        this.spotsAvailable = spotsAvailable;
+        this.spotsTaken = spotsTaken;
         this.spotsTotal = spotsTotal;
         this.instructorLastName = instructorLastName;
     }
 
-    public Course(int courseId, String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsAvailable, short spotsTotal, String instructorLastName) {
+    public Course(int courseId, String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsTaken, short spotsTotal, String instructorLastName) {
         this.courseId = courseId;
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
         this.courseName = courseName;
         this.courseDetails = courseDetails;
-        this.spotsAvailable = spotsAvailable;
+        this.spotsTaken = spotsTaken;
         this.spotsTotal = spotsTotal;
         this.instructorLastName = instructorLastName;
     }
@@ -80,19 +80,19 @@ public class Course {
         this.courseDetails = courseDetails;
     }
 
-    public Short getSpotsAvailable() {
-        return spotsAvailable;
+    public Short getSpotsTaken() {
+        return spotsTaken;
     }
 
-    public void setSpotsAvailable(short spotsAvailable) {
-        this.spotsAvailable = spotsAvailable;
+    public void setSpotsTaken(short spotsAvailable) {
+        this.spotsTaken = spotsAvailable;
     }
 
     public Short getSpotsTotal() {
         return spotsTotal;
     }
 
-    public void setSpotsTaken(short spotsTotal) {
+    public void setSpotsTotal(short spotsTotal) {
         this.spotsTotal = spotsTotal;
     }
 
@@ -111,7 +111,7 @@ public class Course {
                 ", courseInitials='" + courseInitials + '\'' +
                 ", courseNumber=" + courseNumber +
                 ", courseName='" + courseName + '\'' +
-                ", spotsAvailable=" + spotsAvailable +
+                ", spotsTaken=" + spotsTaken +
                 ", spotsTotal=" + spotsTotal +
                 ", instructorLastName='" + instructorLastName + '\'' +
                 '}';

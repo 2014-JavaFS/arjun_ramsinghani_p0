@@ -41,7 +41,7 @@ public class FacultyDAO {
 
     public Course createCourse(Course course) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "insert into course (courseInitials, courseNumber, courseName, courseDetails, spotsAvailable, spotsTotal, instructor) values (?, ?, ?, ?, ?, ?, ?);";
+            String sql = "insert into course (courseInitials, courseNumber, courseName, courseDetails, spotsTaken, spotsTotal, instructor) values (?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
@@ -49,7 +49,7 @@ public class FacultyDAO {
             preparedStatement.setInt(2, course.getCourseNumber());
             preparedStatement.setString(3, course.getCourseName());
             preparedStatement.setString(4, course.getCourseDetails());
-            preparedStatement.setShort(5, course.getSpotsAvailable());
+            preparedStatement.setShort(5, course.getSpotsTaken());
             preparedStatement.setShort(6, course.getSpotsTotal());
             preparedStatement.setString(7, course.getInstructorLastName());
 
@@ -70,11 +70,11 @@ public class FacultyDAO {
 
     public void updateCourseById(int courseId, Course course) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "update course set spotsAvailable = ? where course_id = ?;";
+            String sql = "update course set spotsTaken = ? where course_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
-            preparedStatement.setShort(1, course.getSpotsAvailable());
+            preparedStatement.setShort(1, course.getSpotsTaken());
             preparedStatement.setShort(2, course.getSpotsTotal());
             preparedStatement.setString(3, course.getInstructorLastName());
             preparedStatement.setInt(4, courseId);
@@ -121,7 +121,7 @@ public class FacultyDAO {
                         resultSet.getInt("courseNumber"),
                         resultSet.getString("courseName"),
                         resultSet.getString("courseDetails"),
-                        resultSet.getShort("spotsAvailable"),
+                        resultSet.getShort("spotsTaken"),
                         resultSet.getShort("spotsTotal"),
                         resultSet.getString("instructor")
                 );

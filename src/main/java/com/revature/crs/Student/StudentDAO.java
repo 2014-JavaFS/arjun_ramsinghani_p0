@@ -96,7 +96,7 @@ public class StudentDAO {
                         resultSet.getInt("courseNumber"),
                         resultSet.getString("courseName"),
                         resultSet.getString("courseDetails"),
-                        resultSet.getShort("spotsAvailable"),
+                        resultSet.getShort("spotsTaken"),
                         resultSet.getShort("spotsTotal"),
                         resultSet.getString("instructor")
                 );
@@ -134,29 +134,22 @@ public class StudentDAO {
                         registration.getStudent_id()
                 );
             }
-
-
-
-
-
-
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
         }
 
-        //return null;
         return registration;
     }
 
-    public void cancelCourseRegistrationById(int student_id) {
+    public void cancelCourseRegistrationById(int course_id) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "delete from course_student where student_id = ?;";
+            String sql = "delete from course_student where course_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
-            preparedStatement.setInt(1, student_id);
+            preparedStatement.setInt(1, course_id);
 
             preparedStatement.executeUpdate();
         }
@@ -167,8 +160,8 @@ public class StudentDAO {
     }
 
     public List<Registration> viewRegisteredCourses(int student_id) {
-        List<Registration> registrations = new ArrayList<>();
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
+            List<Registration> registrations = new ArrayList<>();
             String sql = "select * from course_student where student_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, student_id);
@@ -184,11 +177,12 @@ public class StudentDAO {
                 );
                 registrations.add(classes);
             }
+            return registrations;
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
+            return null;
         }
-        return registrations;
     }
 }

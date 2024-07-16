@@ -21,7 +21,7 @@ public class StudentController {
         app.post("/students/registerAccount", this::postCreateAccount);
         app.get("/students/courses", this::viewCourses);
         app.post("/students/registerCourse", this::registerForCourseById);
-        app.delete("/students/cancelRegisteredCourse", this::cancelCourseRegistrationById);
+        app.delete("/students/cancelRegisteredCourse/{course_id}", this::cancelCourseRegistrationById);
         app.get("/students/{student_id}/coursesRegistered", this::viewRegisteredCourses);
     }
 

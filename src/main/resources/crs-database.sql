@@ -4,7 +4,7 @@ set search_path to school;
 -- DROP statements
 drop table student;
 drop table faculty;
-drop table course;
+drop table course cascade;
 
 -- CREATE statements
 create table student(
@@ -29,7 +29,7 @@ create table course(
 	courseNumber integer not null,
 	courseName varchar(100) not null,
 	courseDetails varchar(255),
-	spotsAvailable smallint not null,
+	spotsTaken smallint not null,
 	spotsTotal smallint not null,
 	instructor varchar(40) not null
 );
