@@ -12,10 +12,18 @@ import java.util.List;
 public class StudentController {
     private final StudentService studentService;
 
+    /**
+     * This is a constructor, any dependent objects are provided at initialization.
+     * @param studentService - will inherit Student Service and its methods so that we can take actions.
+     */
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
+    /**
+     * This method will allow us to communicate with our postman and eventually front end for web requests.
+     * @param app - communicates with our Javalin application.
+     */
     public void registerStudentPaths(Javalin app) {
         app.post("/students/login", this::getLogInAccount); //done
         app.post("/students/registerAccount", this::postCreateAccount); //done
@@ -25,6 +33,12 @@ public class StudentController {
         app.get("/students/{student_id}/coursesRegistered", this::viewRegisteredCourses); //done
     }
 
+    /**
+     * This method will allow the faculty to create a class.
+     * Body as Class takes the body from a http request and maps it to an argument class through a Reflection API.
+     * Allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
+     */
     public void postCreateAccount(Context context) throws InvalidInputException {
         Student student = context.bodyAsClass(Student.class);
         context.json(studentService.createAccount(student));
@@ -37,8 +51,8 @@ public class StudentController {
     }
 
     /**
-     * This method details how the student will interact with the login page.
-     * Student can create account if needed.
+     * This method will allow the student to login.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
      */
     public void getLogInAccount(Context context) {
         String username = context.queryParam("username");
@@ -56,6 +70,10 @@ public class StudentController {
         }
     }
 
+    /**
+     * This method gives the student a view of all classes eligible to take.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
+     */
     public void viewCourses(Context context) {
         List<Course> courses = studentService.viewCourses();
 
@@ -68,6 +86,10 @@ public class StudentController {
         }
     }
 
+    /**
+     * This method will register a student to a course.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
+     */
     public void registerForCourseById(Context context) {
         // Body as Class takes the body from an http request and maps it to an argument class through a Reflection API
         // allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters
@@ -83,12 +105,20 @@ public class StudentController {
         }
     }
 
+    /**
+     * This method will delete a course from the student's registration.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
+     */
     public void cancelCourseRegistrationById(Context context) {
         int course_id = Integer.parseInt(context.pathParam("course_id"));
         Registration deletedRegistration = studentService.cancelCourseRegistrationById(course_id);
         context.status(HttpStatus.OK).json(deletedRegistration);
     }
 
+    /**
+     * This method gives the student a view of all classes they are registered for.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
+     */
     public void viewRegisteredCourses(Context context) {
         int student_id = Integer.parseInt(context.pathParam("student_id"));
         List<Registration> registrations = studentService.viewRegisteredCourses(student_id);

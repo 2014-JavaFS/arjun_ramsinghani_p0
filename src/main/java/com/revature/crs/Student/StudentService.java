@@ -3,7 +3,6 @@ package com.revature.crs.Student;
 import com.revature.crs.Course.Course;
 import com.revature.crs.Exceptions.InvalidInputException;
 import com.revature.crs.Registration.Registration;
-
 import javax.security.sasl.AuthenticationException;
 import java.util.List;
 

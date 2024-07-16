@@ -6,6 +6,12 @@ import com.revature.crs.Util.ConnectionUtility;
 import java.sql.*;
 
 public class FacultyDAO {
+    /**
+     * This method will return the account from the database.
+     * @param username - takes in the username provided for login.
+     * @param password - takes in the password provided for login.
+     * @return faculty upon a successful login.
+     */
     public Faculty logInAccount(String username, String password) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
             String sql = "select * from faculty where username = ? AND password = ?;";
@@ -39,6 +45,11 @@ public class FacultyDAO {
         }
     }
 
+    /**
+     * This method will create a course.
+     * @param course - takes in the course from the json context from our controller.
+     * @return a successfully created course.
+     */
     public Course createCourse(Course course) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
             String sql = "insert into course (courseInitials, courseNumber, courseName, courseDetails, spotsTaken, spotsTotal, instructor) values (?, ?, ?, ?, ?, ?, ?);";
@@ -68,13 +79,19 @@ public class FacultyDAO {
         }
     }
 
+    /**
+     * This method will update a course by changing the instructor.
+     * @param courseId - this parameter is used to grab the course.
+     * @param course - this parameter is used to update the course.
+     * @return the updated course.
+     */
     public boolean updateCourseById(int courseId, Course course) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "update course set spotsTotal = ? where course_id = ?;";
+            String sql = "update course set instructor = ? where course_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
-            preparedStatement.setShort(1, course.getSpotsTotal());
+            preparedStatement.setString(1, course.getInstructorLastName());
             preparedStatement.setInt(2, courseId);
 
             preparedStatement.executeUpdate();
@@ -88,22 +105,35 @@ public class FacultyDAO {
         }
     }
 
-    public void deleteCourseById(int course_id) {
+    /**
+     * This method will delete a course.
+     * @param course_id - this parameter is how we will locate the course to be deleted so that we make no mistakes in our database.
+     * @return the deleted course.
+     */
+    public boolean deleteCourseById(int course_id) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "delete from course_student where course_id = ?;";
+            String sql = "delete from course where course_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
             preparedStatement.setInt(1, course_id);
 
             preparedStatement.executeUpdate();
+
+            return true;
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
+            return false;
         }
     }
 
+    /**
+     * This method will return our course by its id.
+     * @param courseId - this parameter is how we will find our course.
+     * @return a course
+     */
     public Course getCourseId(int courseId) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
             String sql = "select * from course where course_id = ?;";

@@ -9,10 +9,18 @@ import javax.security.sasl.AuthenticationException;
 public class FacultyController {
     private final FacultyService facultyService;
 
+    /**
+     * This is a constructor, any dependent objects are provided at initialization.
+     * @param facultyService - will inherit Faculty Service and its methods so that we can take actions.
+     */
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
     }
 
+    /**
+     * This method will allow us to communicate with our postman and eventually front end for web requests.
+     * @param app - communicates with our Javalin application.
+     */
     public void registerFacultyPaths(Javalin app) {
         app.post("/faculties/login", this::getLogInAccount); //done
         app.post("/faculties/courses", this::postCreateCourse); //done
@@ -21,7 +29,8 @@ public class FacultyController {
     }
 
     /**
-     * This method details how the faculty will interact with the login page.
+     * This method will allow the faculty to login.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
      */
     public void getLogInAccount(Context context) {
         String username = context.queryParam("username");
@@ -40,14 +49,13 @@ public class FacultyController {
     }
 
     /**
-     *
-     * @param context
+     * This method will allow the faculty to create a class.
+     * Body as Class takes the body from a http request and maps it to an argument class through a Reflection API.
+     * Allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
      */
     public void postCreateCourse(Context context) {
-        // Body as Class takes the body from a http request and maps it to an argument class through a Reflection API
-        // allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters
         Course course = context.bodyAsClass(Course.class);
-        //Course course = new Course();
         Course addCourse = facultyService.createCourse(course);
 
         if (addCourse != null) {
@@ -60,8 +68,8 @@ public class FacultyController {
     }
 
     /**
-     *
-     * @param context
+     * This method will allow the faculty to update their class.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
      */
     public void putUpdateCourseById(Context context) {
         int updatedCourseId = Integer.parseInt(context.pathParam("course_id"));
@@ -79,15 +87,15 @@ public class FacultyController {
     }
 
     /**
-     *
-     * @param context
+     * This method will allow the faculty to delete their class.
+     * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
      */
     public void deleteCourseById(Context context) {
         int courseId = Integer.parseInt(context.pathParam("course_id")); // parses data through the specified
-        Course deleteCourse = facultyService.deleteCourseById(courseId);
+        boolean deleteCourse = facultyService.deleteCourseById(courseId);
 
-        if (deleteCourse != null) {
-            context.status(HttpStatus.ACCEPTED).json(deleteCourse);
+        if (deleteCourse == true) {
+            context.status(HttpStatus.ACCEPTED).result("Course successfully deleted");
         }
 
         else {
