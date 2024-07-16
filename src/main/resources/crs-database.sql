@@ -52,6 +52,11 @@ insert into course values (default, 'POLS', 2300, 'An Introduction to Communism'
 
 insert into student values (default, 'kayshova', 'toledo@8765', 'Kayshov', 'Agnihotri');
 
+insert into course_student values (default, 1, 1);
+insert into course_student values (default, 1, 3);
+insert into course_student values (default, 2, 1);
+insert into course_student values (default, 2, 3);
+
 -- UPDATE statments
 update course set spotsAvailable = 300 where instructor = 'Karl Marx';
 

@@ -40,23 +40,24 @@ public class StudentService {
         return studentDAO.createAccount(student);
     }
 
-    public List<Course> viewCourses() throws DataNotFoundException {
+    public List<Course> viewCourses() {
         // return a list of all courses
-        List<Course> courses = studentDAO.viewCourses();
+        return studentDAO.viewCourses();
 
-        if (courses.isEmpty()) {
-            throw new DataNotFoundException("No courses available");
-        }
-
-        else {
-            return courses;
-        }
+//        if (courses.isEmpty()) {
+//            throw new DataNotFoundException("No courses available");
+//        }
+//
+//        else {
+//            return courses;
+//        }
     }
 
     // TODO: modify once database is complete
-    public void registerForCourseById() {
+    public void registerForCourseById(Registration registration) {
         // find course by id through view courses
         // return updated registration
+        studentDAO.registerCourseById(registration);
     }
 
     // TODO: modify once database is complete
@@ -67,16 +68,8 @@ public class StudentService {
     }
 
     // TODO: modify once database is complete
-    public List<Registration> viewRegisteredCourses() throws DataNotFoundException {
+    public List<Registration> viewRegisteredCourses(int student_id) {
         // return a list of all courses the student registered for
-        List<Registration> registrations = studentDAO.viewRegisteredCourses();
-
-        if (registrations.isEmpty()) {
-            throw new DataNotFoundException("There are no courses registered to your name, please register a course then try again");
-        }
-
-        else {
-            return registrations;
-        }
+        return studentDAO.viewRegisteredCourses(student_id);
     }
 }

@@ -16,8 +16,8 @@ public class FacultyController {
     public void registerFacultyPaths(Javalin app) {
         app.post("/faculties/login", this::getLogInAccount);
         app.post("/faculties/courses", this::postCreateCourse);
-        app.put("/faculties/courses/{courseId}", this::putUpdateCourseById);
-        app.delete("/faculties/courses/{courseId}", this::deleteCourseById);
+        app.put("/faculties/coursesUpdate/{course_id}", this::putUpdateCourseById);
+        app.delete("/faculties/coursesDelete/{course_id}", this::deleteCourseById);
 
     }
 
@@ -43,6 +43,7 @@ public class FacultyController {
     public void postCreateCourse(Context context) {
         Course course = context.bodyAsClass(Course.class);
         context.json(facultyService.createCourse(course));
+        context.status(HttpStatus.CREATED);
     }
 
     public void putUpdateCourseById(Context context) {

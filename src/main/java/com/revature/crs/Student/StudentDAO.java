@@ -111,16 +111,33 @@ public class StudentDAO {
         }
     }
 
-    public void registerCourseById(int course_id, int student_id) {
+    public Registration registerCourseById(Registration registration) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            String sql = "insert into course_student (course_id) values (?);";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            String sql = "insert into course_student (course_id, student_id) values (?, ?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             // Set method, the user input starts at index 1 or 0
-            preparedStatement.setInt(1, course_id);
+            preparedStatement.setInt(1, registration.getCourse_id());
+            preparedStatement.setInt(2, registration.getStudent_id());
 
             // Result Set logic
             preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                int generatedKeys = resultSet.getInt(1);
+
+                return new Registration(
+                        generatedKeys,
+                        registration.getCourse_id(),
+                        registration.getStudent_id()
+                );
+            }
+
+
+
+
 
 
         }
@@ -130,6 +147,7 @@ public class StudentDAO {
         }
 
         //return null;
+        return registration;
     }
 
     public void cancelCourseRegistrationById(int student_id) {
@@ -148,12 +166,12 @@ public class StudentDAO {
         }
     }
 
-    public List<Registration> viewRegisteredCourses() {
+    public List<Registration> viewRegisteredCourses(int student_id) {
+        List<Registration> registrations = new ArrayList<>();
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            List<Registration> registrations = new ArrayList<>();
-
             String sql = "select * from course_student where student_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, student_id);
 
             // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -166,12 +184,11 @@ public class StudentDAO {
                 );
                 registrations.add(classes);
             }
-            return registrations;
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
-            return null;
         }
+        return registrations;
     }
 }

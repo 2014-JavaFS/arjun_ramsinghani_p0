@@ -1,7 +1,6 @@
 package com.revature.crs.Student;
 
 import com.revature.crs.Course.Course;
-import com.revature.crs.Exceptions.DataNotFoundException;
 import com.revature.crs.Exceptions.InvalidInputException;
 import com.revature.crs.Registration.Registration;
 import io.javalin.Javalin;
@@ -23,7 +22,7 @@ public class StudentController {
         app.get("/students/courses", this::viewCourses);
         app.post("/students/registerCourse", this::registerForCourseById);
         app.delete("/students/cancelRegisteredCourse", this::cancelCourseRegistrationById);
-        app.get("/students/courses/registered", this::viewRegisteredCourses);
+        app.get("/students/{student_id}/coursesRegistered", this::viewRegisteredCourses);
     }
 
     public void postCreateAccount(Context context) throws InvalidInputException {
@@ -57,7 +56,7 @@ public class StudentController {
         }
     }
 
-    public void viewCourses(Context context) throws DataNotFoundException {
+    public void viewCourses(Context context) {
         List<Course> courses = studentService.viewCourses();
 
         if (courses != null) {
@@ -70,7 +69,8 @@ public class StudentController {
     }
 
     public void registerForCourseById(Context context) {
-        studentService.registerForCourseById();
+        Registration registration = context.bodyAsClass(Registration.class);
+        studentService.registerForCourseById(registration);
         context.status(HttpStatus.ACCEPTED);
     }
 
@@ -79,15 +79,16 @@ public class StudentController {
         studentService.cancelCourseRegistrationById(course_id);
     }
 
-    public void viewRegisteredCourses(Context context) throws DataNotFoundException {
-        List<Registration> registrations = studentService.viewRegisteredCourses();
+    public void viewRegisteredCourses(Context context) {
+        int student_id = Integer.parseInt(context.pathParam("student_id"));
+        List<Registration> registrations = studentService.viewRegisteredCourses(student_id);
 
         if (registrations != null) {
-            context.status(HttpStatus.ACCEPTED);
+            context.status(HttpStatus.ACCEPTED).json(registrations);
         }
 
         else {
-            context.status(HttpStatus.NOT_FOUND);
+            context.status(HttpStatus.NOT_FOUND).result("No courses have been registered to your name");
         }
     }
 }

@@ -28,7 +28,7 @@ public class FacultyService {
 
     public Course createCourse(Course course) {
         // return the created course
-        if ((course.getCourseInitials() == "") || (course.getCourseName() == "") || (course.getCourseDetails() == "") || (course.getInstructorLastName() == "")) {
+        if ((course.getCourseInitials() == "") || (course.getCourseName() == "") || (course.getCourseDetails() == "") || (course.getInstructorLastName() == "") || (course.getSpotsTotal() == 0) || (course.getCourseNumber() == 0)) {
             return null;
         }
 

@@ -42,7 +42,7 @@ public class FacultyDAO {
     public Course createCourse(Course course) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
             String sql = "insert into course (courseInitials, courseNumber, courseName, courseDetails, spotsAvailable, spotsTotal, instructor) values (?, ?, ?, ?, ?, ?, ?);";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
             preparedStatement.setString(1, course.getCourseInitials());
@@ -53,32 +53,19 @@ public class FacultyDAO {
             preparedStatement.setShort(6, course.getSpotsTotal());
             preparedStatement.setString(7, course.getInstructorLastName());
 
-            preparedStatement.executeUpdate();
+            int checkInsert = preparedStatement.executeUpdate();
 
-            // Result Set logic
-            ResultSet resultSet = preparedStatement.getGeneratedKeys();
-
-            if (resultSet.next()) {
-                int generatedCourseId = resultSet.getInt(1);
-
-                return new Course(
-                        generatedCourseId,
-                        course.getCourseInitials(),
-                        course.getCourseNumber(),
-                        course.getCourseName(),
-                        course.getCourseDetails(),
-                        course.getSpotsAvailable(),
-                        course.getSpotsTotal(),
-                        course.getInstructorLastName()
-                );
+            if (checkInsert == 0) {
+                throw new RuntimeException("Course was not inserted into the database");
             }
+
+            return course;
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
+            return null;
         }
-
-        return null;
     }
 
     public void updateCourseById(int courseId, Course course) {
