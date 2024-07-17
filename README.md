@@ -1,5 +1,8 @@
 ## Course Registration Application Details
 
+### Course Management System
+![](src/main/resources/Course%20Registration%20System%20Entity%20Relationship%20Diagram.png)
+
 ### User Stories
 
 As any kind of user, I can:
