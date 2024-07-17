@@ -94,7 +94,10 @@ public class StudentController {
         // Body as Class takes the body from an http request and maps it to an argument class through a Reflection API
         // allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters
         Registration registration = context.bodyAsClass(Registration.class);
-        Registration newRegistration = studentService.registerForCourseById(registration);
+        Course course = new Course();
+        short spots = course.getSpotsTaken();
+        Registration newRegistration = studentService.registerForCourseById(registration, spots);
+
 
         if (newRegistration != null) {
             context.status(HttpStatus.CREATED).json(newRegistration);

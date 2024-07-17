@@ -40,15 +40,15 @@ create table course_student(
     student_id integer not null,
 
     foreign key (course_id) references course(course_id) on delete cascade,
-    foreign key (student_id) references student(student_id) on delete cascade
+    foreign key (student_id) references student(student_id)
 );
 
 -- INSERT statements
 insert into student values (default, 'aramsing', 'bhopal@4321', 'Arjun', 'Ramsinghani');
 insert into faculty values (default, 'cjester', 'philly@8567', 'Charles', 'Jester');
 insert into faculty values (default, 'kmarx', 'c0mmun!sm', 'Karl', 'Marx');
-insert into course values (default, 'SWE', 8750, 'Infosys Training Full Stack', 'A course to prepare students for Infosys', 25, 24, 'Charles Jester');
-insert into course values (default, 'POLS', 2300, 'An Introduction to Communism', 'An introductory course in how to create a Communist Government', 25, 25, 'Karl Marx');
+insert into course values (default, 'SWE', 8750, 'Infosys Training Full Stack', 'A course to prepare students for Infosys', 0, 24, 'Charles Jester');
+insert into course values (default, 'POLS', 2300, 'An Introduction to Communism', 'An introductory course in how to create a Communist Government', 0, 25, 'Karl Marx');
 
 insert into student values (default, 'kayshova', 'toledo@8765', 'Kayshov', 'Agnihotri');
 

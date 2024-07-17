@@ -5,6 +5,11 @@ import com.revature.crs.Exceptions.DataNotFoundException;
 import com.revature.crs.Util.ConnectionUtility;
 import java.sql.*;
 
+
+/**
+ * A DAO is a class that mediates the transformation of data between the format of objects in Java to rows in a database.
+ * The methods here are mostly filled out, you will just need to add a SQL statement.
+ */
 public class FacultyDAO {
     /**
      * This method will return the account from the database.

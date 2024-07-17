@@ -1,5 +1,8 @@
 package com.revature.crs.Student;
 
+/**
+ * This class models a Student and their properties.
+ */
 public class Student {
     private int student_id;
     private String username;
@@ -7,9 +10,18 @@ public class Student {
     private String f_name;
     private String l_name;
 
+    /** Constructors: Initializes(fills in the information for the class attribute or variables) or Instantiates(creation of the object) a class,
+     *  What if don't define constructors? There is an implicit/default constructor that sets everything to null, NoArgs Constructor
+     *  What happens to our default/NoArgs constructor if we create a constructor?
+     *  OOP - Polymorphism - Method Overloading, changing the number of parameters defined & the actions that take place
+     */
     public Student() {
     }
 
+    /**
+     * Reason behind naming the parameters in our constructor the same as our class attributes is to shadow the names,
+     * so you know EXACTLY what's being initiliazed
+     */
     public Student(String username, String password) {
         this.username = username;
         this.password = password;
@@ -23,6 +35,10 @@ public class Student {
         this.l_name = l_name;
     }
 
+    /**
+     * Methods - functionality applied to every class
+     * Getters & Setters >> Overrides >> Custom Methods
+     */
     public String getUsername() {
         return username;
     }

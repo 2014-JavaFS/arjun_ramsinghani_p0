@@ -1,7 +1,10 @@
 package com.revature.crs.Course;
 
+/**
+ * This class models a Course and its properties.
+ */
 public class Course {
-    private int courseId;
+    private int course_id;
     private String courseInitials;
     private int courseNumber;
     private String courseName;
@@ -10,9 +13,18 @@ public class Course {
     private short spotsTotal;
     private String instructorLastName;
 
+    /** Constructors: Initializes(fills in the information for the class attribute or variables) or Instantiates(creation of the object) a class,
+     *  What if don't define constructors? There is an implicit/default constructor that sets everything to null, NoArgs Constructor
+     *  What happens to our default/NoArgs constructor if we create a constructor?
+     *  OOP - Polymorphism - Method Overloading, changing the number of parameters defined & the actions that take place
+     */
     public Course() {
     }
 
+    /**
+     * Reason behind naming the parameters in our constructor the same as our class attributes is to shadow the names,
+     * so you know EXACTLY what's being initiliazed
+     */
     public Course(String courseInitials, int courseNumber, String courseName) {
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
@@ -29,8 +41,8 @@ public class Course {
         this.instructorLastName = instructorLastName;
     }
 
-    public Course(int courseId, String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsTaken, short spotsTotal, String instructorLastName) {
-        this.courseId = courseId;
+    public Course(int course_id, String courseInitials, int courseNumber, String courseName, String courseDetails, short spotsTaken, short spotsTotal, String instructorLastName) {
+        this.course_id = course_id;
         this.courseInitials = courseInitials;
         this.courseNumber = courseNumber;
         this.courseName = courseName;
@@ -40,12 +52,16 @@ public class Course {
         this.instructorLastName = instructorLastName;
     }
 
-    public int getCourseId() {
-        return courseId;
+    /**
+     * Methods - functionality applied to every class
+     * Getters & Setters >> Overrides >> Custom Methods
+     */
+    public int getCourse_id() {
+        return course_id;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setCourse_id(int course_id) {
+        this.course_id = course_id;
     }
 
     public String getCourseInitials() {
@@ -107,7 +123,7 @@ public class Course {
     @Override
     public String toString() {
         return "Course{" +
-                "courseId=" + courseId +
+                "course_id=" + course_id +
                 ", courseInitials='" + courseInitials + '\'' +
                 ", courseNumber=" + courseNumber +
                 ", courseName='" + courseName + '\'' +
