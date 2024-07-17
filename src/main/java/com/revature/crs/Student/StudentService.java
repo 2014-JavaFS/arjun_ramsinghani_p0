@@ -42,7 +42,7 @@ public class StudentService {
      * This method will create a student's account.
      * @param student - a student's account.
      * @return a created student account.
-     * @throws InvalidInputException
+     * @throws InvalidInputException - if our input is not validated through the validation if process.
      */
     public Student createAccount(Student student) throws InvalidInputException {
         if ((student.getUsername() == "") || (student.getPassword() == "") || (student.getF_name() == "") || (student.getL_name() == "")) {

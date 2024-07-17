@@ -32,8 +32,6 @@ public class StudentDAO {
 
             // Executes query
             preparedStatement.executeUpdate();
-
-            // Result Set logic
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
 
             if (resultSet.next()) {
@@ -70,8 +68,6 @@ public class StudentDAO {
             // Set method, the user input starts at index 1 or 0
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
-
-            // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (!resultSet.next()) {
@@ -105,8 +101,6 @@ public class StudentDAO {
 
             String sql = "select * from course;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-            // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -145,8 +139,6 @@ public class StudentDAO {
             // Set method, the user input starts at index 1 or 0
             preparedStatement.setInt(1, registration.getCourse_id());
             preparedStatement.setInt(2, registration.getStudent_id());
-
-            // Result Set logic
             preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -180,7 +172,6 @@ public class StudentDAO {
 
             // Set method, the user input starts at index 1 or 0
             preparedStatement.setInt(1, registration_id);
-
             preparedStatement.executeUpdate();
         }
 
@@ -200,8 +191,6 @@ public class StudentDAO {
             String sql = "select * from course_student where student_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, student_id);
-
-            // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -233,8 +222,6 @@ public class StudentDAO {
 
             // Prepared Statement will grab our input
             preparedStatement.setInt(1, registration_id);
-
-            // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -267,7 +254,6 @@ public class StudentDAO {
             // Set method, the user input starts at index 1 or 0
             preparedStatement.setShort(1, ++spotsTaken); // pre increment will increment the value before any logic (in this case setting the value) is done to it
             preparedStatement.setInt(2, courseId);
-
             preparedStatement.executeUpdate();
 
             return true;
@@ -291,8 +277,6 @@ public class StudentDAO {
 
             // Prepared Statement will grab our input
             preparedStatement.setInt(1, courseId);
-
-            // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {

@@ -13,7 +13,7 @@ public class Course {
     private short spotsTotal;
     private String instructorLastName;
 
-    /** Constructors: Initializes(fills in the information for the class attribute or variables) or Instantiates(creation of the object) a class,
+    /** Constructors: Initializes (fills in the information for the class attribute or variables) or Instantiates (creation of the object) a class,
      *  What if don't define constructors? There is an implicit/default constructor that sets everything to null, NoArgs Constructor
      *  What happens to our default/NoArgs constructor if we create a constructor?
      *  OOP - Polymorphism - Method Overloading, changing the number of parameters defined & the actions that take place
@@ -23,7 +23,7 @@ public class Course {
 
     /**
      * Reason behind naming the parameters in our constructor the same as our class attributes is to shadow the names,
-     * so you know EXACTLY what's being initiliazed
+     * so you know EXACTLY what's being initialized
      */
     public Course(String courseInitials, int courseNumber, String courseName) {
         this.courseInitials = courseInitials;

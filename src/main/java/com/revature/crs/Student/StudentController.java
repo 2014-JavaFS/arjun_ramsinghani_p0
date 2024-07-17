@@ -24,7 +24,7 @@ public class StudentController {
     }
 
     /**
-     * This method will allow us to communicate with our postman and eventually front end for web requests.
+     * This method will allow us to communicate with our postman and eventually front end for web requests. Met MVP.
      * @param app - communicates with our Javalin application.
      */
     public void registerStudentPaths(Javalin app) {
