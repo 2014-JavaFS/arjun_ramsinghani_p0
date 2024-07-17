@@ -16,7 +16,6 @@ public class StudentService {
 
     /**
      * This is a constructor, any dependent objects are provided at initialization.
-     * @param studentDAO - will inherit Faculty DAO and its methods so that we can take actions.
      */
     public StudentService() {
         studentDAO = new StudentDAO();
@@ -46,7 +45,6 @@ public class StudentService {
      * @throws InvalidInputException
      */
     public Student createAccount(Student student) throws InvalidInputException {
-        // return the created account
         if ((student.getUsername() == "") || (student.getPassword() == "") || (student.getF_name() == "") || (student.getL_name() == "")) {
             throw new InvalidInputException("One or more fields are null");
         }
@@ -59,7 +57,6 @@ public class StudentService {
      * @return a list of courses.
      */
     public List<Course> viewCourses() {
-        // return a list of all courses
         return studentDAO.viewCourses();
     }
 
@@ -67,23 +64,19 @@ public class StudentService {
      * This method will register a student for a given class.
      * This will also check to insure the student is able to register.
      * @param registration - a registration object created.
-     * @param spotsTaken - the number of spots taken by students.
      * @return
      */
-    public Registration registerForCourseById(Registration registration, short spotsTaken) {
-        // find course by id through view courses
-        // return updated registration
+    public Registration registerForCourseById(Registration registration) throws Exception {
         int course_id = registration.getCourse_id();
-        //Course course = new Course();
-        //short spotsTotal = course.getSpotsTotal();
-        spotsTaken++;
+        Course course = studentDAO.getCourseId(course_id);
 
-//        if (spotsTaken > spotsTotal) {
-//            throw new Exception("There is no more room for registration.");
-//        }
+        if (course.getSpotsTaken() >= course.getSpotsTotal()) {
+            throw new Exception("There is no more room for registration.");
+        }
 
-        studentDAO.updateCourseById(course_id, spotsTaken);
-        return studentDAO.registerCourseById(registration);
+        Registration newRegistration = studentDAO.registerCourseById(registration);
+        studentDAO.updateCourseById(course_id, course.getSpotsTaken());
+        return newRegistration;
     }
 
     /**
@@ -92,8 +85,6 @@ public class StudentService {
      * @return the deleted registration
      */
     public Registration cancelCourseRegistrationById(int registration_id) {
-        // find in registered courses
-        // return updated registration
         Registration deletedRegistration = studentDAO.getRegistrationId(registration_id);
 
         if (deletedRegistration == null) {
@@ -110,7 +101,6 @@ public class StudentService {
      * @return a list of registered courses.
      */
     public List<Registration> viewRegisteredCourses(int student_id) {
-        // return a list of all courses the student registered for
         return studentDAO.viewRegisteredCourses(student_id);
     }
 }

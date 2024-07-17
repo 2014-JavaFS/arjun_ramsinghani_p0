@@ -9,6 +9,9 @@ import io.javalin.http.HttpStatus;
 import javax.security.sasl.AuthenticationException;
 import java.util.List;
 
+/**
+ * CONTROLLER CLASS DOCUMENTATION
+ */
 public class StudentController {
     private final StudentService studentService;
 
@@ -88,15 +91,14 @@ public class StudentController {
 
     /**
      * This method will register a student to a course.
+     * Body as Class takes the body from a http request and maps it to an argument class through a Reflection API.
+     * Allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters.
      * @param context - provides the context either in form of json. Eventually we can also use this with the front end.
      */
-    public void registerForCourseById(Context context) {
-        // Body as Class takes the body from an http request and maps it to an argument class through a Reflection API
-        // allows Jackson to use a no-arg constructor and setters to build a registration object in memory where json fields match exactly to our model attributes and setters
+    public void registerForCourseById(Context context) throws Exception {
         Registration registration = context.bodyAsClass(Registration.class);
-        Course course = new Course();
-        short spots = course.getSpotsTaken();
-        Registration newRegistration = studentService.registerForCourseById(registration, spots);
+
+        Registration newRegistration = studentService.registerForCourseById(registration);
 
 
         if (newRegistration != null) {

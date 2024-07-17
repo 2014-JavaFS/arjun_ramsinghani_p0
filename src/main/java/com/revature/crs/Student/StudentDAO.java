@@ -22,7 +22,7 @@ public class StudentDAO {
     public Student createAccount(Student student) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
             String sql = "insert into student (username, password, f_name, l_name) values (?, ?, ?, ?);";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); // Return Generated Keys will return a unique id for the object we are creating.
 
             // Set method, the user input starts at index 1 or 0
             preparedStatement.setString(1, student.getUsername());
@@ -140,7 +140,7 @@ public class StudentDAO {
     public Registration registerCourseById(Registration registration) {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
             String sql = "insert into course_student (course_id, student_id) values (?, ?);";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); // Return Generated Keys will return a unique id for the object we are creating.
 
             // Set method, the user input starts at index 1 or 0
             preparedStatement.setInt(1, registration.getCourse_id());
@@ -160,13 +160,13 @@ public class StudentDAO {
                         registration.getStudent_id()
                 );
             }
+            return registration;
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
+            return null;
         }
-
-        return registration;
     }
 
     /**
@@ -256,7 +256,7 @@ public class StudentDAO {
     /**
      * This method will update a course by changing the number of spots taken by +1.
      * @param courseId - this parameter is used to grab the course.
-     * @param course - this parameter is used to update the course.
+     * @param spotsTaken - this parameter is used to update the number of spots taken in a course.
      * @return the updated course.
      */
     public boolean updateCourseById(int courseId, short spotsTaken) {
@@ -265,7 +265,7 @@ public class StudentDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Set method, the user input starts at index 1 or 0
-            preparedStatement.setShort(1, spotsTaken);
+            preparedStatement.setShort(1, ++spotsTaken); // pre increment will increment the value before any logic (in this case setting the value) is done to it
             preparedStatement.setInt(2, courseId);
 
             preparedStatement.executeUpdate();
@@ -284,10 +284,9 @@ public class StudentDAO {
      * @param courseId - this parameter is how we will find our course.
      * @return a course
      */
-    public List<Registration> getCourseId(int courseId) {
+    public Course getCourseId(int courseId) throws Exception {
         try (Connection connection = ConnectionUtility.getConnectionUtility().getConnection()) {
-            List<Registration> registrations = new ArrayList<>();
-            String sql = "select count(*) from course_student where course_id = ?;";
+            String sql = "select * from course where course_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // Prepared Statement will grab our input
@@ -296,20 +295,29 @@ public class StudentDAO {
             // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                Registration registration = new Registration(
-                        resultSet.getInt("registration_id"),
+            if (resultSet.next()) {
+                Course course = new Course(
                         resultSet.getInt("course_id"),
-                        resultSet.getInt("student_id")
+                        resultSet.getString("courseInitials"),
+                        resultSet.getInt("courseNumber"),
+                        resultSet.getString("courseName"),
+                        resultSet.getString("courseDetails"),
+                        resultSet.getShort("spotsTaken"),
+                        resultSet.getShort("spotsTotal"),
+                        resultSet.getString("instructor")
                 );
-                registrations.add(registration);
+                return course;
             }
-            return registrations;
+
+            else {
+                throw new Exception("A course with this Id was not found.");
+            }
+
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
+            return null;
         }
-        return null;
     }
 }
